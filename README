@@ -1,0 +1,34 @@
+This is the project repository for CUHK/CSCI5160, 2012 Spring, managed by Pili HU. 
+
+>>1. Citation Note
+
+If you find anything useful and want to build your future work on it, please cite this page properly. One suggested entry:
+---
+Pili HU, Spectral Techniques for Community Detection on 2-Hop Topology, https://github.com/hupili/Spectral-2Hop
+---
+One suggested BibTex entry:
+---
+@MISC{hu2011-cd2hop,
+	author = {Hu Pili},
+	title = {Spectral Techniques for Community Detection on 2-Hop Topology},
+	howpublished = {GitHub, https://github.com/hupili/Spectral-2Hop},
+	month = {4},
+	year = {2012},
+	note = {course project of CUHK/CSCI5160},
+}
+---
+
+>>2. File Description
+
+
+>>3. Acknowledgement
+
+The authors would like to thank the following people for their contribution of personal data: Bo WANG, Hongshu LIAO, Huan CHEN, Shouxi LUO, Xiaoyu LUO, Xinyue ZHENG, Yan WANG, Yi LUO. 
+
+(This section is copied from a former related project. 
+In this project we also use this dataset and the author
+highly appreciates their contribution)
+
+>>4. Contact
+
+HU, Pili: http://personal.ie.cuhk.edu.hk/~hpl011/
