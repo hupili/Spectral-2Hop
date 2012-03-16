@@ -8,7 +8,7 @@ Pili HU, Spectral Techniques for Community Detection on 2-Hop Topology, https://
 ---
 One suggested BibTex entry:
 ---
-@MISC{hu2011-spectral2hop,
+@MISC{hu2012-spectral2hop,
 	author = {Hu, Pili},
 	title = {Spectral Techniques for Community Detection on 2-Hop Topology},
 	howpublished = {GitHub, https://github.com/hupili/Spectral-2Hop},
