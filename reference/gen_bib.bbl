@@ -1,4 +1,31 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{aggarwal2011social}
+C.C. Aggarwal.
+\newblock {\em Social network data analytics}.
+\newblock Springer-Verlag New York Inc, 2011.
+
+\bibitem{hu2012-spectral2hop}
+Pili Hu.
+\newblock Spectral techniques for community detection on 2-hop topology.
+\newblock GitHub, https://github.com/hupili/Spectral-2Hop, 4 2012.
+\newblock course project of CUHK/CSCI5160.
+
+\bibitem{hu2011-cd2hop}
+Pili Hu and Yichao Li.
+\newblock Community detection on 2-hop topology.
+\newblock GitHub, https://github.com/Czlyc/2C-Web-Research, 12 2011.
+\newblock course project of CUHK/CSCI5180.
+
+\bibitem{spielman-2009spectral-ln}
+DA~Spielman.
+\newblock Spectral graph theory lecture notes.
+\newblock http://www.cs.yale.edu/homes/spielman/561/, 2011.
+
+\bibitem{von2007tutorial}
+U.~Von~Luxburg.
+\newblock A tutorial on spectral clustering.
+\newblock {\em Statistics and Computing}, 17(4):395--416, 2007.
 
 
 \bibitem{csci5160course}
