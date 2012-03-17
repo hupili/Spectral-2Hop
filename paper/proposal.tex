@@ -6,6 +6,8 @@
 \usepackage{amssymb}
 \usepackage{url}
 
+\newcommand{\question}{\textbf{---NEED-REVIEW-HERE---}}
+
 \author{HU, Pili}
 \title{Spectral Techniques for Community Detection on 2-Hop Topology}
 
@@ -14,10 +16,107 @@
 \maketitle
 
 \begin{abstract}
-	abstract. 
+	In one of our former project\cite{hu2011-cd2hop}, we formulated
+	the problem of community detection on 2-hop topology. Given 
+	one observer in a social network, and the graph it can reach 
+	within two steps, we want to determine for those vertices whether they're
+	in the same community with the observer. 
+	The previous project extracts features like Common Neighbours, Ademic/Adar
+	Score, Pagerank, and Personalized Pagerank, etc. Then several neural 
+	networks are trained to combine those features. 
+	Interested readers can refer to \cite{hu2011-cd2hop}
+	for more information.  
+	
+	In this project, we augment our research based on the same settings. 
+	Several spectral techniques are leveraged to tackle with the 2-hop 
+	problem. For instance, spectral clustering may utilize the information 
+	hidden in more eigen vectors. Other technique like personalized PageRank 
+	can be studied with the budgeted learning context. 
+	For data, codes, and other materials, please refer to 
+	our open source repository\cite{hu2012-spectral2hop}. 
 \end{abstract}
 
+\pagebreak
+\tableofcontents
+\pagebreak
+
 \section{Introduction}
+
+\subsection{Problem}
+Notations:
+\begin{table}[htb]
+	\centering
+	\caption{Notations}
+	\label{tbl:notation}
+	\begin{tabular}{c|c}
+	\hline
+	Symbol & Explanation \\
+	\hline
+	$n$ & node number \\
+	\hline
+	$m$ & edge number \\
+	\hline
+	$A$ & adjacency matrix \\
+	\hline
+	$A_{ij}$ & 1 if node $i$ and node $j$ are directly \\
+	& connected, 0 otherwise\\
+	\hline
+	$N(i)$ & neighbourhood of $i$, namely \\
+	& $N(i) = \{j | A_{ij} = 1 \}$ \\
+	\hline
+	$d(i)$ & degree of node $i$ \\
+	& $d(i) = \sum_{j}{A_{ij}}$ \\
+	\hline
+	$o$ & observer \\
+	\hline
+	$l_i$ & the real label of node $i$ \\
+	\hline
+	$L_i$ & the predicted label of node $i$ \\
+	\hline
+	$N2(i)$ & the 2-hop neighbours we study, defined as \\
+	& $\cup_{j \in N(i) \cup \{i\}}{N(j)}$\\
+	\hline
+	\end{tabular}
+\end{table}
+
+Problem settings:
+\begin{itemize}
+	\item Give observer $o$. 
+	\item Give the two hop topology, namely the $N2(o)$ and 
+	the associated links. 
+	\item Try to predict $L_i$ according to the above information. 
+	\item Ground truth $l_i$ is directly crawled from the website. 
+\end{itemize}
+
+\subsection{Evaluation}
+
+Our evaluation method distinguishes this work from many 
+previous ones. Usual evaluation criterion is defining 
+a certain quality functions, like\cite{aggarwal2011social} normalized cut, 
+conductance, and modularity. Different research groups 
+have their own taste and preference. 
+
+The major problem is, those quality functions can reflect 
+the accuracy of algorithms only to a limited extent. 
+Let spectral clustering be an example. Luxburg\cite{von2007tutorial}
+explains clustering using the notion of finding sets of nodes 
+with small conductance in between. In this way, if conductance 
+is selectd as the quality function, a good "clustering" is 
+a natural consequence of spectral clustering algorithm. 
+
+While those quality functions are simple and intuitive to 
+facilitate theoretical study, they can not completely reflect the 
+real application performance. In this work, we crawled ground truth
+data from one SNS, thus we're able to evaluate the output 
+against those crawled label. 
+
+
+
+\subsection{Digest of Previous Results}
+
+\section{Proposed Future Study Line}
+
+
 
 \input{../reference/gen_bib.bbl}
 
