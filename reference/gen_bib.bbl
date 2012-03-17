@@ -22,6 +22,12 @@ DA~Spielman.
 \newblock Spectral graph theory lecture notes.
 \newblock http://www.cs.yale.edu/homes/spielman/561/, 2011.
 
+\bibitem{strehl2003cluster}
+A.~Strehl and J.~Ghosh.
+\newblock Cluster ensembles---a knowledge reuse framework for combining
+  multiple partitions.
+\newblock {\em The Journal of Machine Learning Research}, 3:583--617, 2003.
+
 \bibitem{von2007tutorial}
 U.~Von~Luxburg.
 \newblock A tutorial on spectral clustering.
