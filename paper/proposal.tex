@@ -267,7 +267,51 @@ Chanllenges on this line:
 
 \subsection{Personalized PR}
 
+The general form of personalized PR is shown in eqn(\ref{eq:ppr}). 
+\begin{equation}
+	\vec{v} = \alpha A^{\rm T}\vec{v}
+	+ (1-\alpha)\frac{\vec{b}}{||\vec{b}||_1}
+	\label{eq:ppr}
+\end{equation}
+
+If we want to compute the PPR for a set of starting nodes, 
+we only need to set all entries corresponding to those nodes 
+to 1, and others are left zero. Of course, setting those non-zero
+entries to values other than 1 is possible but in the current work 
+we only consider 1 for simplicity(meaning no bias on the starting 
+set). 
+
+In this work, we'll do a survey on PPR related literature.
+We seek for potential theoretical characterization of our problem, 
+since in the former work we already find that PPR performs the best
+alone. 
+
 \subsection{Budgeted Learning}
+
+In practice, resources are often limited, so we want to do 
+budgeted learning. That is, finding the tradeoff between 
+cost and performance. 
+
+This research line roots from the observation on PPR:
+\begin{itemize}
+	\item PPR can be linearly combined:
+\begin{eqnarray}
+	\vec{v} &=& \alpha A^{\rm T}\vec{v}
+	+ (1-\alpha)\frac{\vec{b}}{||\vec{b}||_1} \\
+	&=& \alpha A^{\rm T}\vec{v}
+	+ (1-\alpha)\frac{
+	\sum_{i \in 
+	\text{support($\vec{b}$)}}{e_i}}
+	{||\vec{b}||_1} \\
+	&=& \frac{1}{{||\vec{b}||_1}}
+	\sum_{i \in \text{support($\vec{b}$)}}{\alpha A^{\rm T}\vec{v}_i}
+	+
+	\frac{1}{{||\vec{b}||_1}}
+	\sum_{i \in \text{support($\vec{b}$)}}{(1-\alpha)e_i}
+	\label{eq:ppr_linear} 
+\end{eqnarray}
+\end{itemize}
+
 
 \subsection{Visualization}
 
