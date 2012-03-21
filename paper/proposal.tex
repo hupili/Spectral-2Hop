@@ -390,7 +390,7 @@ be improved in the following way:
 
 \subsection{Cluster Ensemble}
 
-This is a practical problem but may not related with spectral techniques directly. 
+This is a practical problem but may be not related with spectral techniques directly. 
 I put here as a memo. 
 
 Assume we already have a well performed algorithm that takes the data from 
@@ -407,6 +407,54 @@ observers may have a certain intersection. \cite{strehl2003cluster}
 first proposed the cluster ensemble problem and use mutual information 
 as the criterion. They formulated an optimization problem to find
 the ensembled cluster. 
+
+\section{Challenges}
+
+\begin{itemize}
+	\item Preprocessing. Although in our previous project, 
+	a lot of preprocessing was done, they're far from enough. 
+	With the extension of the this study, other preprocessign may be needed. 
+	\item Large computation. Our node number is on the order 
+	of 100K. Many direct matrix operations are prohibited.
+	In our former project, we implemented the PR algorithm ourselves 
+	in C, which essentially speaking is a practical form of 
+	sparse matrix-vector product. This program can give result 
+	in several seconds on our data set. However, for spectral 
+	clustering, which involves eigen value decomposition, 
+	the computational cost is more serious. Current plan comes 
+	in two folds:
+		\begin{enumerate}
+			\item Deploy other high performance libraries, like 
+			CLPACK. 
+			\item Tailor the raw data. Details need to be designed 
+			upon the analysis of the data. 
+		\end{enumerate}		  
+\end{itemize}
+
+\section{Schedule}
+
+\begin{table}[htb]
+	\centering
+	\caption{Schedule[2012, April - May]}
+	\begin{tabular}{|c|c|c|}
+	\hline
+	Time Period & Content & Expected Output \\
+	\hline
+	April Week 1-2 & PPR & Survey \\
+	April Week 2 & Ink spilling algo. & Implementation \\
+	April Week 3 & Budgeted Learning & Sensitivity Simulation \\
+	April Week 4 & Spectral Clustering & Implementation\\
+	May Week 1 & Sum up & Report \\
+	\hline
+	\end{tabular}
+\end{table}
+
+The current schedule is subject to change according to intermediate outcomes. 
+Initial focus is to do survey, implementation, and simulation. 
+We expect the successful application of those spectral techniques
+in our problem. Theoretical 
+analysis will be given if there are considerably good results. 
+
 
 \input{../reference/gen_bib.bbl}
 
