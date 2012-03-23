@@ -1,0 +1,10 @@
+(This file is updated by appending)
+
+====
+Random Walk(lazy or not) on undirected graph, converges to a trivial distribution: pi(i) = degree(i)/(2|E|). Note that in our former project, the better set of PR computes on the undirected version. We can test the ROC of pi(i), and compare it with PR(not PPR).  
+
+====
+How to handle rank leakage problem?
+   * For single dangling node, a self loop can be added. (It's possible to become sink now). 
+   * Any single node or a set of node forming strongly connected components with no out-going links is a sink. In stationary distribution, probability will focus on these sinks. Reverse links can be added to alleviate the problem, which induces the undirected version of original graph. 
+   * To deal with sinks, introducing supernode also works. What's more, the introduction of super node increases computation complexity by a trivial amount. 
