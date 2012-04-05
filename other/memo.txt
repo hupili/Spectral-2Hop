@@ -15,3 +15,19 @@ Use the technique of recovering hidden clique:
    * Spectral partitioning of semi-random graphs. [McSherry, 2002] 
 
 Justification: real community is very close to "clique". We can model the whole network as several hidden cliques with other randomly added inter-community edges. In our 2-hop local problem, we're also interested in the clique centered at observer. 
+
+====
+Suggested outline:
+1. Motivating problem. 
+2. Describe different methods with mathematical explanation. 
+3. Predict whether they match the current problem. 
+4. Experimental evaluation. (future)
+
+====
+Technical content:
+1. Effective resistance:
+    http://www.cs.yale.edu/homes/spielman/462/lect13-10.pdf 
+2. Spectral embedding. 
+3. Spectral clustering. 
+4. PageRank, PPR. 
+
