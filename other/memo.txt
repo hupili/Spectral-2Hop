@@ -31,3 +31,6 @@ Technical content:
 3. Spectral clustering. 
 4. PageRank, PPR. 
 
+====
+Add one simple feature:
+   * Betweenness. in R, package igraph, betweenness function can directly compute the quantity. It's defined as the ratio of pathes connecting i,j through v over pathes connecting i,j.
