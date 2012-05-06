@@ -34,3 +34,9 @@ Technical content:
 ====
 Add one simple feature:
    * Betweenness. in R, package igraph, betweenness function can directly compute the quantity. It's defined as the ratio of pathes connecting i,j through v over pathes connecting i,j.
+
+====
+Improved isomap:
+   * Effective resistance can be a distance measure of two nodes. 
+   * isomap compute shortest path distance and then do dimension reduction like MDS. 
+   * Substitute this SP distance by effective resistance. (commute time, a (2m) factor)
