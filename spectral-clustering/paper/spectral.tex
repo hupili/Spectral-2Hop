@@ -1,6 +1,14 @@
 %Modify the relative path accordingly
 \input{common.tex}
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\floatname{algorithm}{Algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{subfigure}
+
 \fancyhead[LO,LE]{HU, Pili}
 \fancyhead[RO,RE]{Spectral Clustering Survey}
 
@@ -16,7 +24,7 @@
 \maketitle
 %>============================================
 \begin{abstract}
-	Abstract. 
+	Abstract. Sources can be found in \cite{hu2012-spectral2hop}. 
 \end{abstract}
 %<=======Abstract ENd=========================
 
@@ -46,7 +54,7 @@ used in computational psychology for a very long time\cite{borg2005modern},
 which can be viewed as both "embedding" or "dimensionality reduction".
 
 
-According to our survey, although those methods target at different problem
+According to our survey, although those methods target at different problems
 and are derived from different assumptions, they do share a lot in common. 
 The most significant sign is that, the core procedure involves 
 eigenvalue decomposition or singular value decomposition, aka "spectral". 
@@ -56,6 +64,98 @@ non-Euclidean / non-metric points into a low-dimensional Euclidean space
 these algorithms as Spectral Embedding Technique(SET). 
 
 \subsection{A Sample Spectral Clustering Algorithm}
+
+%%Following is just an example copied from:
+%%http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+%\begin{algorithm}                      % enter the algorithm environment
+%\caption{Calculate $y = x^n$}          % give the algorithm a caption
+%\label{alg1}                           % and a label for \ref{} commands later in the document
+%\begin{algorithmic}                    % enter the algorithmic environment
+%    \REQUIRE $n \geq 0 \vee x \neq 0$
+%    \ENSURE $y = x^n$
+%\end{algorithmic}
+%\end{algorithm}
+
+There are many variations of SC. They all work under certain conditions
+and researchers don't have a rule of thumb so far. Before we analyze their
+procedure and justification, we present a simple but workable sample 
+algorithm(\ralg{\ref{alg:sc_sample}}). 
+
+\begin{algorithm}[htb]
+	\caption{Sample Spectral Clustering}
+	\label{alg:sc_sample}
+	\begin{algorithmic}[1]
+		\REQUIRE Data matrix $X = [x_1, x_2, \ldots, x_N]$;  
+		Number of Clusters $K$. 
+		\ENSURE Clustering $\{C_i\}$: $C_i \in V$ 
+			and $\cap_i C_i = \emptyset$
+			and $\cup_i C_i = V$. 
+		\STATE Form adjacency matrix $A$ within $\epsilon$-ball.
+		\STATE Solve $A = U \Lambda \tran{U}$, indexed according 
+		the eigenvalue's magnitude. 
+		\STATE $Y \leftarrow$ first $K$ columns of U. 
+		\STATE Cluster $Y$'s rows by K-means. 
+	\end{algorithmic}
+\end{algorithm}
+
+In \ralg{\ref{alg:sc_sample}}, the $\epsilon$-ball adjacency graph is 
+constructed as follows. First create one vertex for each data point. 
+If for two points $i,j$ satisfy $||x_i-x_j|| < \epsilon$, connect 
+them with an edge. In this simple demonstration, we consider an unweighted
+graph, i.e. all entries of $A$ are 0(disconnected) or 1(connected). 
+
+\begin{figure}
+	\centering
+	\subfigure[Data Scatter Plot]{
+		\includegraphics[width=0.4\textwidth]{../plot/sc_sample_scatter.png}	
+		\label{fig:ssc_data}
+	}
+	\subfigure[Standard K-means]{
+		\includegraphics[width=0.4\textwidth]{../plot/sc_sample_kmeans.png}	
+		\label{fig:ssc_kmeans}
+	}
+	\subfigure[Adjacency Graph]{
+		\includegraphics[width=0.4\textwidth]{../plot/sc_sample_adj.png}	
+		\label{fig:ssc_adj}
+	}
+	\subfigure[Sample SC Algorithm]{
+		\includegraphics[width=0.4\textwidth]{../plot/sc_sample_sc.png}	
+		\label{fig:ssc_sc}
+	}
+	\caption{Demonstration of Sample SC Algorithm}
+	\label{fig:ssc_demo}
+\end{figure}
+
+\rfig{\ref{fig:ssc_demo}} demonstrates the result of our sample SC algorithm, 
+compared with standard K-means algorithm. 
+\rfig{\ref{fig:ssc_data}} shows the scatter plot of data. 
+It is composed of one radius 1 circle and another radius 2 circle, 
+both centered at (1,1). 
+\rfig{\ref{fig:ssc_kmeans}} shows the result of standard K-means
+working on Euclidean distance. 
+\rfig{\ref{fig:ssc_adj}} shows the graph representation, where 
+the adjacency graph is formed by taking a $\epsilon$-ball and 
+$\epsilon=0.7$ in the example. 
+\rfig{\ref{fig:ssc_sc}} shows the output of \ralg{\ref{alg:sc_sample}}. 
+It's obvious that standard K-means algorithm can not correctly cluster 
+the two circles. This is a known major weakness of K-means(in Euclidean): 
+When clusters are not well separated spheres, it has difficulty recovering 
+the underlying clusters. Although K-means works for this case 
+if we transform the points 
+into polar coordinate system(see \cite{hu2012-spectral2hop} for code), 
+the solution is not universal. However, in this example, our sample SC 
+algorithm can separate the two clusters, probably because the eigenvectors
+of adjacency matrix convey adequate information. 
+
+A precaution is that \ralg{\ref{alg:sc_sample}} does not always work even 
+in this simple case. Nor have we seen this algorithm from formally published works
+(so far), let alone justifications. This algorithm is only to show the flavour 
+of spectral clustering and it contains those important steps in other
+more sophisticated algorithms. Readers are recommended to learn 
+von Luxburg's tutorial\cite{von2007tutorial} before reading the following sections. 
+Since that paper is very detailed, we'll present overlapping topics 
+concisely. 
+
 
 \subsection{Linear Algebraic Properties}
 
@@ -95,6 +195,9 @@ these algorithms as Spectral Embedding Technique(SET).
 \subsection{Commute Time}
 [jihun ham, kernel]. 
 view pseudo inverse of graph Laplacian by commute times on graphs. 
+
+\subsection{Polarization}
+[m. brand] unifying view... 
 
 \section{Other Spectral Like Embedding}
 \label{sec:nldr}
