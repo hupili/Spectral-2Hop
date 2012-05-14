@@ -32,6 +32,29 @@
 \section{Introduction}
 \label{sec:introduction}
 
+Spectral Clustering(SC) was used in several disciplines long ago. 
+For example, computer vision\cite{shi2000normalized}, load balancing
+\cite{hendrickson1993multidimensional}, electronics design
+\cite{hadley1992efficient}, etc.  Spectral Embeding(SE) was 
+also widely discussed in the community\cite{brand2003unifying}. 
+Outside spectral community, the machine learning community also 
+developed many linear or non-linear Dimensionality Reduction(DR) methods, 
+like Principal Component Anslysis (PCA), Kernel PCA (KPCA)\cite{scholkopf1998kpca}, 
+Locally Linear Embedding (LLE)\cite{roweis2000lle}, etc. 
+Other technique like Multi-Dimensional Scaling(MDS) was successfully 
+used in computational psychology for a very long time\cite{borg2005modern}, 
+which can be viewed as both "embedding" or "dimensionality reduction".
+
+
+According to our survey, although those methods target at different problem
+and are derived from different assumptions, they do share a lot in common. 
+The most significant sign is that, the core procedure involves 
+eigenvalue decomposition or singular value decomposition, aka "spectral". 
+They all involve an intermidiate step of embedding high-dimensional / 
+non-Euclidean / non-metric points into a low-dimensional Euclidean space
+(although some do not embed explicitly). In this case, we categorize all 
+these algorithms as Spectral Embedding Technique(SET). 
+
 \subsection{A Sample Spectral Clustering Algorithm}
 
 \subsection{Linear Algebraic Properties}

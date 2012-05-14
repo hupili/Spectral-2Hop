@@ -1,10 +1,67 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{borg2005modern}
+I.~Borg and P.J.F. Groenen.
+\newblock {\em Modern multidimensional scaling: Theory and applications}.
+\newblock Springer Verlag, 2005.
+
+\bibitem{brand2003unifying}
+M.~Brand and K.~Huang.
+\newblock A unifying theorem for spectral embedding and clustering.
+\newblock In {\em Proceedings of the Ninth International Workshop on Artificial
+  Intelligence and Statistics}, 2003.
+
+\bibitem{hadley1992efficient}
+S.W. Hadley, B.L. Mark, and A.~Vannelli.
+\newblock An efficient eigenvector approach for finding netlist partitions.
+\newblock {\em Computer-Aided Design of Integrated Circuits and Systems, IEEE
+  Transactions on}, 11(7):885--892, 1992.
+
+\bibitem{hendrickson1993multidimensional}
+B.~Hendrickson and R.~Leland.
+\newblock Multidimensional spectral load balancing.
+\newblock {\em Report SAND93-0074, Sandia National Laboratories, Albuquerque,
+  NM}, <<missing>>:<<missing>>, 1993.
+
+\bibitem{hu2012-matrix-calculus}
+Pili Hu.
+\newblock Matrix calculus.
+\newblock GitHub,
+  https://github.com/hupili/tutorial/tree/master/matrix-calculus, 3 2012.
+\newblock HU, Pili's tutorial collection.
 
 \bibitem{hu-tutorial}
 Pili Hu.
 \newblock Tutorial collection.
 \newblock GitHub, https://github.com/hupili/tutorial, 3 2012.
 \newblock HU, Pili's tutorial collection.
+
+\bibitem{roweis2000lle}
+S.T. Roweis and L.K. Saul.
+\newblock Nonlinear dimensionality reduction by locally linear embedding.
+\newblock {\em Science}, 290(5500):2323--2326, 2000.
+
+\bibitem{saul2000introduction}
+L.K. Saul and S.T. Roweis.
+\newblock An introduction to locally linear embedding.
+\newblock Technical report, NYU, 2000.
+
+\bibitem{saul2003think}
+L.K. Saul and S.T. Roweis.
+\newblock Think globally, fit locally: unsupervised learning of low dimensional
+  manifolds.
+\newblock {\em The Journal of Machine Learning Research}, 4:119--155, 2003.
+
+\bibitem{scholkopf1998kpca}
+B.~Sch{\"o}lkopf, A.~Smola, and K.R. M{\"u}ller.
+\newblock Nonlinear component analysis as a kernel eigenvalue problem.
+\newblock {\em Neural computation}, 10(5):1299--1319, 1998.
+
+\bibitem{shi2000normalized}
+J.~Shi and J.~Malik.
+\newblock Normalized cuts and image segmentation.
+\newblock {\em Pattern Analysis and Machine Intelligence, IEEE Transactions
+  on}, 22(8):888--905, 2000.
 
 
 \end{thebibliography}
