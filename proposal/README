@@ -1,0 +1,7 @@
+This proposal was originally written to collect things I could think of 
+that are related the 2hop community detection problem. Most of them, 
+together with those recorded in the 'memo.txt' file will be tried out 
+later. To fit into the course requirement, I focus on one point after 
+a breath based survey. I choose spectral clustering at last. Now I output
+a survey of spectral clustering as in depth as I can. The original proposal 
+is moved here to avoid file collision. 
