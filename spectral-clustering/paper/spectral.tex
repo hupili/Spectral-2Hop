@@ -157,9 +157,70 @@ Since that paper is very detailed, we'll present overlapping topics
 concisely. 
 
 
+\subsection{Spectral Clustering Taxonomy}
+
+When the readers start to survey SC related topics, they will soon find that
+there are two streams of study:
+\begin{itemize}
+	\item \textbf{Embedding Like}. 
+		An example is presented in 
+		\ralg{\ref{alg:sc_sample}}. One of the core procedure is 
+		an embedding of points into lower dimensional Euclidean space. 
+		After that, hard cut algorithm like K-means is invoked to 
+		get the final result. 		
+		This stream has a lot in common with SE and
+		DR. In the current article, we focus on this line of research. 
+	\item \textbf{Partitioning Like}. 
+		One early example is the 
+		2-way cut algorithm presented by Shi and Malik in\cite{shi2000normalized}.
+		Later Kannan et al. analyzed the framework further\cite{kannan2004clusterings}. 
+		The core procedure of this type of algorithm is a 2-way 
+		partitioning subroutine. By invoke this subroutine on 
+		resultant subgraph repeatedly, we can get final $K$ clusters. 
+		When the subroutine can guarantee certain quality, 
+		the global resultant clustering quality can be guaranteed
+		\cite{kannan2004clusterings}. The attracting aspect of Kannan's framework
+		is that, we can plugin any subroutine as long as they have 
+		quality gurantee in one cut. For example, the eigen vector of 
+		left normalized graph Laplacian can induce good 2-way cut 
+		in terms of the Normalized Cut\cite{shi2000normalized}
+		(\rsec{\ref{sec:ncut}}). This line of research is more close 
+		to Spectral Graph Partitioning(SGP), although those algorithms also get the name 
+		of Spectral Clustering. 
+\end{itemize}
+
+It's worth to note some work of SGP. In Spielman's\cite{spielman-2009spectral-ln} 
+and Lau's\cite{lau-2012-spectral-ln} lecture notes, they both presented a 
+graph partitioning algorithm said to result from Lov{\'a}sz\cite{lovasz1990mixing}. 
+Chung\cite{chung2007random} made this framework clear: First define a function 
+$f(v)$ on all vertices; Then set threshold $T$ to cut vertices into two groups, 
+$\{v|f(v) \le T\}$ and $\{v|f(v) > T\}$. The question now becomes to find a 
+good heuristic function $f$. Note that the original bi-partition problem is of
+complexity $O(2^N)$ and the heuristic based bi-partition problem is of 
+$O(N)$(plus the time to get $f$). If we define $f$ as the second eigen vector 
+of left normalized graph Laplacian, it is just the algorithm of Shi and
+Malik\cite{shi2000normalized}. Besides, there can be multiple $f_i$ and 
+the best cut can still be searched in polynomial time
+(given $f_i$). For example, in 
+\cite{lau-2012-spectral-ln} Lau used random walk probability 
+$P_1, P_2, \ldots, P_t$ as $f$. Some recent research of the heuristic function
+are Personalized Pagerank\cite{andersen2007detecting}, 
+Evolving Sets\cite{andersen2009finding}, etc. 
+
+In the rest of this article, we refer Spectral Clustering to the 
+first type, i.e. the embedding like algorithms. 
+
+
+
 \subsection{Linear Algebraic Properties}
 
+
+
+
 \section{Spectral Clustering Framework}
+\label{sec:framework}
+
+
 
 \subsection{Metric Formulation}
 
@@ -175,6 +236,7 @@ concisely.
 [von]
 
 \subsection{Normalized Cut}
+\label{sec:ncut}
 [shi]
 
 \subsection{Ratio Cut}

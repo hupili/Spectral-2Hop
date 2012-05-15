@@ -1,5 +1,18 @@
 \begin{thebibliography}{10}
 
+\bibitem{andersen2007detecting}
+R.~Andersen and F.~Chung.
+\newblock Detecting sharp drops in pagerank and a simplified local partitioning
+  algorithm.
+\newblock {\em Theory and Applications of Models of Computation},
+  <<missing>>:1--12, 2007.
+
+\bibitem{andersen2009finding}
+R.~Andersen and Y.~Peres.
+\newblock Finding sparse cuts locally using evolving sets.
+\newblock In {\em Proceedings of the 41st annual ACM symposium on Theory of
+  computing}, pages 235--244. ACM, 2009.
+
 \bibitem{borg2005modern}
 I.~Borg and P.J.F. Groenen.
 \newblock {\em Modern multidimensional scaling: Theory and applications}.
@@ -10,6 +23,11 @@ M.~Brand and K.~Huang.
 \newblock A unifying theorem for spectral embedding and clustering.
 \newblock In {\em Proceedings of the Ninth International Workshop on Artificial
   Intelligence and Statistics}, 2003.
+
+\bibitem{chung2007random}
+F.~Chung.
+\newblock Random walks and local cuts in graphs.
+\newblock {\em Linear Algebra and its applications}, 423(1):22--32, 2007.
 
 \bibitem{hadley1992efficient}
 S.W. Hadley, B.L. Mark, and A.~Vannelli.
@@ -42,6 +60,23 @@ Pili Hu.
 \newblock GitHub, https://github.com/hupili/tutorial, 3 2012.
 \newblock HU, Pili's tutorial collection.
 
+\bibitem{kannan2004clusterings}
+R.~Kannan, S.~Vempala, and A.~Vetta.
+\newblock On clusterings: Good, bad and spectral.
+\newblock {\em Journal of the ACM (JACM)}, 51(3):497--515, 2004.
+
+\bibitem{lau-2012-spectral-ln}
+Lap~Chi Lau.
+\newblock Spectral algorithm lecture notes.
+\newblock http://www.cse.cuhk.edu.hk/~chi/csc5160/index.html, 2012.
+
+\bibitem{lovasz1990mixing}
+L.~Lov{\'a}sz and M.~Simonovits.
+\newblock The mixing rate of markov chains, an isoperimetric inequality, and
+  computing the volume.
+\newblock In {\em Foundations of Computer Science, 1990. Proceedings., 31st
+  Annual Symposium on}, pages 346--354. IEEE, 1990.
+
 \bibitem{roweis2000lle}
 S.T. Roweis and L.K. Saul.
 \newblock Nonlinear dimensionality reduction by locally linear embedding.
@@ -68,6 +103,11 @@ J.~Shi and J.~Malik.
 \newblock Normalized cuts and image segmentation.
 \newblock {\em Pattern Analysis and Machine Intelligence, IEEE Transactions
   on}, 22(8):888--905, 2000.
+
+\bibitem{spielman-2009spectral-ln}
+DA~Spielman.
+\newblock Spectral graph theory lecture notes.
+\newblock http://www.cs.yale.edu/homes/spielman/561/, 2011.
 
 \bibitem{von2007tutorial}
 U.~Von~Luxburg.
