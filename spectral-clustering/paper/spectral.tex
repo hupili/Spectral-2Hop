@@ -430,7 +430,7 @@ procedures. At the same time, people propose some
 enhancement techniques based on certain assumptions. 
 
 Geodesic distance, as is in isomap\cite{tenenbaum2000isomap}, 
-computes all pair shortest path(geodesic distance) 
+computes all pair shortest path (geodesic distance) 
 of the adjacency graph first. Then the pairwise geodesic distance 
 is treated as normal distance, $D$. The standard MDS
 (\rsec{\ref{sec:mds}}) can 
@@ -449,8 +449,53 @@ be hard.
 
 \subsection{Spectral Embeding}
 
+
+
 \subsection{Clustering}
 
+For K-means and hierarchical clustering, readers
+can consult standard data mining texts like \cite{jiawei2001data}.
+For simpler hard cut algorithms, like using the 
+largest entry of embedded coordinates as the cluster index, 
+we omit the discussion in this section because their operation 
+and justification are closely binded. As an example 
+to stimulate exploring more hard cut techniques, we propose 
+a variation of K-means. This variation should work better with 
+Ng's \cite{ng2002spectral} and Brand's \cite{brand2003unifying} 
+SE procedure. 
+
+\begin{algorithm}[htb]
+	\caption{Angular K-means}
+	\label{alg:sc_akm}
+	\begin{algorithmic}[1]
+		\REQUIRE output of SE: $Y = [y_1, y_2, \ldots, y_N]$;  
+		Number of Clusters $K$. 
+		\ENSURE Clustering $\{C_i\}$: $C_i \in V$ 
+			and $\cap_i C_i = \emptyset$
+			and $\cup_i C_i = V$. 
+		\STATE Random initilize cluster centers $t^{(new)}_1, t^{(new)}_2, \dots, t^{(new)}_K$.
+		\REPEAT{
+			\STATE $t^{(old)}_i \leftarrow t^{(new)}_i$
+			\STATE $l_i \leftarrow \argmax_{j}<y_i,t^{(old)}_j>, \forall i=1,2,\ldots,N$
+			\STATE $t^{(new)}_j \leftarrow \sum_{i=1}^{N}{[l_i=j]x_i}, \forall j=1,2,\ldots,K$
+			\COMMENT{$[.]$ is indicator function}
+			\STATE Normalize $t^{(new)}_j, \forall j=1,2,\ldots,K$
+		}\UNTIL{$(\sum_{j=1}^{K}{(1-<t^{(new)}_j,t^{(old)}_j>})) < \epsilon$}
+		\STATE $C_j = \{i| l_i = j\}$
+	\end{algorithmic}
+\end{algorithm}
+
+In Ng's \cite{ng2002spectral} and Brand's \cite{brand2003unifying} work, 
+their low dimensional points are projected onto a unit sphere. It is more 
+reasonable to cluster according to the angles
+in this case. Our variation of K-means
+(\ralg{\ref{alg:sc_akm}}) takes the embedding property into consideration. 
+Again the hard cut stage is not the focus of SC or SE study, so 
+little work has been found to explore suitable hard cut algorithms. 
+As long as the SE stage induces well located clusters, Euclidean 
+K-means can easily detect them. As reported in \cite{ng2002spectral}, 
+with special initialization of K-means centroids, only one recursion 
+is needed for convergence. 
 
 \section{Spectral Clustering Justification}
 \label{sec:justification}
