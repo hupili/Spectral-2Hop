@@ -13,6 +13,17 @@ R.~Andersen and Y.~Peres.
 \newblock In {\em Proceedings of the 41st annual ACM symposium on Theory of
   computing}, pages 235--244. ACM, 2009.
 
+\bibitem{belkin2003laplacian}
+M.~Belkin and P.~Niyogi.
+\newblock Laplacian eigenmaps for dimensionality reduction and data
+  representation.
+\newblock {\em Neural computation}, 15(6):1373--1396, 2003.
+
+\bibitem{bishop2006pattern}
+C.M Bishop.
+\newblock {\em Pattern recognition and machine learning}, volume~4.
+\newblock springer New York, 2006.
+
 \bibitem{borg2005modern}
 I.~Borg and P.J.F. Groenen.
 \newblock {\em Modern multidimensional scaling: Theory and applications}.
@@ -60,6 +71,11 @@ Pili Hu.
 \newblock GitHub, https://github.com/hupili/tutorial, 3 2012.
 \newblock HU, Pili's tutorial collection.
 
+\bibitem{jiawei2001data}
+H.~Jiawei and M.~Kamber.
+\newblock {\em Data mining: concepts and techniques}, volume~5.
+\newblock San Francisco, CA, itd: Morgan Kaufmann, 2001.
+
 \bibitem{kannan2004clusterings}
 R.~Kannan, S.~Vempala, and A.~Vetta.
 \newblock On clusterings: Good, bad and spectral.
@@ -76,6 +92,12 @@ L.~Lov{\'a}sz and M.~Simonovits.
   computing the volume.
 \newblock In {\em Foundations of Computer Science, 1990. Proceedings., 31st
   Annual Symposium on}, pages 346--354. IEEE, 1990.
+
+\bibitem{ng2002spectral}
+A.Y. Ng, M.I. Jordan, and Y.~Weiss.
+\newblock On spectral clustering: Analysis and an algorithm.
+\newblock {\em Advances in neural information processing systems}, 2:849--856,
+  2002.
 
 \bibitem{roweis2000lle}
 S.T. Roweis and L.K. Saul.
@@ -109,10 +131,25 @@ DA~Spielman.
 \newblock Spectral graph theory lecture notes.
 \newblock http://www.cs.yale.edu/homes/spielman/561/, 2011.
 
+\bibitem{tenenbaum2000isomap}
+J.B. Tenenbaum, V.~De~Silva, and J.C. Langford.
+\newblock A global geometric framework for nonlinear dimensionality reduction.
+\newblock {\em Science}, 290(5500):2319--2323, 2000.
+
 \bibitem{von2007tutorial}
 U.~Von~Luxburg.
 \newblock A tutorial on spectral clustering.
 \newblock {\em Statistics and Computing}, 17(4):395--416, 2007.
 
 
-\end{thebibliography}
+\bibitem{wiki_jaccard}
+	Wikipedia, Jaccard Coefficient, 
+	\url{http://en.wikipedia.org/wiki/Jaccard_index}
+	
+\bibitem{wiki_md}
+	Wikipedia, Mahalanobis Distance, 
+	\url{http://en.wikipedia.org/wiki/Mahalanobis_distance}
+	
+\bibitem{wiki_cos}
+	Wikipedia, Cosine Similarity, 
+	\url{http://en.wikipedia.org/wiki/Cosine_similarity}\end{thebibliography}

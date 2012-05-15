@@ -7,6 +7,10 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
+%notation shortcuts
+\newcommand{\nL}{\mathcal{L}}
+\newcommand{\nA}{\mathcal{A}}
+
 \usepackage{subfigure}
 
 \fancyhead[LO,LE]{HU, Pili}
@@ -59,7 +63,7 @@ which can be viewed as both "embedding" or "dimensionality reduction".
 According to our survey, although those methods target at different problems
 and are derived from different assumptions, they do share a lot in common. 
 The most significant sign is that, the core procedure involves 
-eigenvalue decomposition or singular value decomposition, aka "spectral". 
+Eigen Value Decomposition(EVD) or Singular Value Decomposition(SVD), aka "spectral". 
 They all involve an intermidiate step of embedding high-dimensional / 
 non-Euclidean / non-metric points into a low-dimensional Euclidean space
 (although some do not embed explicitly). In this case, we categorize all 
@@ -214,18 +218,234 @@ In the rest of this article, we refer Spectral Clustering to the
 first type, i.e. the embedding like algorithms. 
 
 
-
 \subsection{Linear Algebraic Properties}
-
 
 
 
 \section{Spectral Clustering Framework}
 \label{sec:framework}
 
+We propose the following framework to absorb currently 
+surveyed variations of SC(and other SET):
+\begin{enumerate}
+	\item \textbf{Metric Formulation}. 
+		This step forms a pairwise metric, upon which 
+		an adjacency matrix of (weighted) graph can be 
+		constructed. 
+		There are several kinds of 
+		input: high-dimensional data (usual case); pairwise proximity  
+		input (like MDS, see \rsec{\ref{sec:mds}}); (weighted) graph
+		(like the input of SGP). 
+		If the input of SC is already a graph, 
+		this step is omitted.
+		For proximity measures, especially dissmilarity, it is 
+		usually first converted to approximte pairwise inner product in 
+		Euclidean space. The pairwise inner product is a positive 
+		related quantity with similarity(e.g. Jaccard's coefficient 
+		for 0/1 vector\cite{wiki_jaccard}), and thus suits the notion 
+		of weights of graph edges. For high-dimensional data, there are 
+		more freedom in the metric formulation stage, like 
+		similarity graph\cite{von2007tutorial}, geodesic 
+		distance\cite{tenenbaum2000isomap}, etc. 
+	\item \textbf{Sepctral Embedding}. 
+		With the adjacency matrix built in last stage, 
+		this stage embeds all vertices into a lower dimensional 
+		Euclidean space. For SC community, this embedding 
+		makes clustering structure more clear, so that 
+		simple algorithms working in Euclidean space can detect 
+		the clusters. For DR community, this embedding reveals 
+		the shape of manifolds in their parametric space. 
+		The two goals are essentially the same. The core procedure 
+		is to do EVD and differences 
+		lie before and after EVD:
+			\begin{itemize}
+				\item \textbf{Matrix Type}. Some authors use
+					graph Laplacian
+					\cite{von2007tutorial,belkin2003laplacian,shi2000normalized} ;
+					others use \cite{ng2002spectral,brand2003unifying,kannan2004clusterings}
+					adjacency matrix. 
+				\item \textbf{Normalization}. Both Laplacian and 
+					adjacency matrix can be unnormalized, symmetrically normalized, 
+					or left(row) normalized\cite{von2007tutorial}. They corresponds to 
+					different interpretation and will be explored later. 
+				\item \textbf{Scaling}. 
+					As is shown in \ralg{\ref{alg:sc_sample}}, we can directly 
+					embed vertices using the corresponding row of $Y$
+					(like \cite{ng2002spectral}). Other alternatives 
+					are to scale by square root eigenvalue (like \cite{brand2003unifying})
+					and scale by eigenvalue (like PCA\cite{bishop2006pattern}). 
+				\item \textbf{Projection}. For many algorithms, the $Y$ 
+					(after scaling) provides an Euclidean space embedding. 
+					There are others which further project the rows of $Y$
+					onto a unit sphere, like \cite{ng2002spectral} and
+					\cite{brand2003unifying}. 
+			\end{itemize}
+	\item \textbf{Clustering}. 
+		Based on the embedding result, simple algorithms can be invoked to 
+		perform a hard cut on the points. Traditional methods from data mining
+		community are K-means and hierarchical clustering like single/complete
+		linkage\cite{jiawei2001data}. Among those techniques, K-means are the most 
+		widely used. A variation of K-means will be proposed later in this article,
+		in order to better fit some angle preserving SET. Simpler 
+		hard cut techniques are also possible, e.g. looking at the largest entry 
+		of the embedding coordinates\cite{kannan2004clusterings}.  
+\end{enumerate}
+
+Note that not all of the combinations are justified in published works. 
+%		What's more, different normalization with different scaling may yield
+%		the same result. 
+We organize them in this way to reveal possibilities from a practitioners
+perspective. If some combinations yield good results in practice, we can 
+seek for justifications using tools from spectral graph theory or machine learning. 
 
 
 \subsection{Metric Formulation}
+
+We rate great importance of metric formulation step, 
+although it is not the main body of SET. 
+There are always many ways of metric formulation
+given a practical problem. With poorly constructed 
+metric matrix, even the best embedding technique helps little.  
+
+%This is a test of math fonts!
+%Yeah! I found the notation for normalized 
+%adjacency and Laplacian is just the 
+%\mathcal style!
+%$   \mathit{L}
+%    \mathrm{L}
+%    \mathbf{L}
+%    \mathsf{L}
+%    \mathtt{L}
+%    \mathcal{L}$
+
+\subsubsection{High Dimensional Data}
+
+For high dimensional data, the following ways can be 
+applied to obtain a graph representation:
+\begin{itemize}
+	\item $\epsilon$-ball\cite{von2007tutorial}. If $||x_i-x_j|| < \epsilon$, we connect 
+		vertices $i,j$ with an edge. 
+	\item k-Nearest-Neighbour(kNN)\cite{von2007tutorial}. For each vertex, we connect 
+		it with its $k$ nearest neighbours based on Euclidean distance. 
+	\item Mutual kNN(m-kNN)\cite{von2007tutorial}. Note the set of kNN is not symmetric. 
+		Multual kNN connects those points who are kNN to each other. 
+	\item Complete graph\cite{von2007tutorial}. All vertices are connected with 
+		each other. This construction is ususally used with Gaussian kernel 
+		weighting below. 
+\end{itemize}
+
+After the construction of graph, edges can be weighted in several ways:
+\begin{itemize}
+	\item Unweighted\cite{belkin2003laplacian}. The adjacency matrix is 
+		mere 1(connected) or 0(disconnected). 
+	\item Gaussian kernel\cite{von2007tutorial}, also 
+		called heat kernel\cite{belkin2003laplacian}. Each edge is weighted
+		by $A_{ij} = \exp\{-||x_i-x_j||^2/t\}$, where $t$ is a super parameter
+		controling the decaying rate of similarity. 
+\end{itemize}
+
+Heuristics on selecting $\epsilon, k, t$ are proposed by many authors, 
+e.g. ch8 of \cite{von2007tutorial}, but there is no real 
+rule of thumb. Since the focus of SET study is on the embedding part, 
+most work do not try hard to tweak the construction of similarity graph. 
+We propose other possibilities, which may be helpful to target 
+different practical problems:
+\begin{itemize}
+	\item Mahalanobis distance\cite{wiki_md}. The connection condition 
+		$||x_i-x_j|| < \epsilon$ is substituted by 
+		$\tran{(x_i-x_j)}\Sigma^{-1}(x_i-x_j) < \epsilon^2$. 
+		Accodingly, when Gaussian kernel is used, the edge weight
+		is given by $A_{ij} = \exp\{-0.5\tran{(x_i-x_j)}\Sigma^{-1}(x_i-x_j)\}$. 
+	\item Jaccard's coefficient\cite{wiki_jaccard}. It computes the ratio 
+		of the intersection and union two sets. It is useful when 
+		the high dimensional input coordinates can be interpreted as 
+		sets. 
+	\item Cosine similarity\cite{wiki_cos}. It computes the 
+		angle between two vectors and is widely used in 
+		text mining context. 
+\end{itemize}
+
+
+\subsubsection{Proximity}
+
+Many real problems has proximity as input. Proximity 
+can be described by similarity or dissimilarity. 
+With pairwise similarity input, we can directly fit the 
+data into following SE procedure. A more interesting 
+problem is to transform dissimilarity into similarity, 
+or at least an equivalent quantity. 
+Decomposing the transformed matrix should be able to yield
+reasonable embedding(under certain justification). 
+
+Denote data matrix by $X = [x_1, x_2, \ldots, x_N]$. Every 
+column $x_j$ corresponds to an $n$ dimensional point. We 
+calculate the pairwise squared distance by 
+$d^2_{ij} = ||x_i - x_j||^2 = \tran{x_i}x_i + \tran{x_j}x_j - 2\tran{x_i}x_j$. 
+Grouping the $N^2$ entries into matrix form, we have:
+\begin{equation}
+	D^{(2)} = c\tran{\vec{1}} + \vec{1}\tran{c} - 2 \tran{X}X
+\end{equation}
+where $c$ is a column vector with $\tran{x_i}x_i$ being the entries. 
+We'll see later (\rsec{\ref{sec:mds}}) that once a matrix $B$ can be 
+written in the form $B = \tran{X}X$, we have standard ways to decompose
+it and recover the low dimensional embedding. That is, given 
+dissimilarity measures, we can construct the corresponding inner 
+product form. A standard approach is double centering: \cite{borg2005modern}
+\begin{eqnarray}
+	J &=& I - \frac{1}{n} \vec{1} \tran{\vec{1}} \\
+	\tran{X}X &=& -\frac{1}{2}JD^{(2)}J
+\end{eqnarray}
+
+There are yet two problems left:
+\begin{itemize}
+	\item First, not all dissimilarities are distance. One reason is 
+		that the real world data is with noise. In such case, 
+		random noise will be reduced by SET. Another reason, 
+		maybe more frequently seen, is data inconsistency. 
+		This is quite often seen in computational psychology 
+		when people try to rate the degree of dissimilarity of 
+		objects\cite{borg2005modern}. Those empirical data 
+		may break distance laws, like triangle inequality. 
+	\item Second, in order to make double centering work, 
+		the low dimensional data are required to zero mean, 
+		namely $\sum_i{x_i} = 0$. Actually, we can choose any 
+		points as the origin(rather than sample mean), and 
+		corresponding forms can be derived. Since our input in this case 
+		is pairwise distance($D$ or $D^{(2)}$), their is no 
+		explicit definition of origin. Or in another word, 
+		the effect of embedding is invariant under translation. 
+		We can safely locate the embedded sample mean at the origin. 
+\end{itemize}
+
+In total, given dissimilarity matrix $D$, we 
+take the element wise square $D^{(2)}$ and then 
+pass the double centered version $-\frac{1}{2}JD^{(2)}J$
+to next stage. 
+
+\subsubsection{Enhancements}
+
+The above sections discussed the basic formulation of an 
+adjacency matrix $A$. They can be fit direcly into SE
+procedures. At the same time, people propose some 
+enhancement techniques based on certain assumptions. 
+
+Geodesic distance, as is in isomap\cite{tenenbaum2000isomap}, 
+computes all pair shortest path(geodesic distance) 
+of the adjacency graph first. Then the pairwise geodesic distance 
+is treated as normal distance, $D$. The standard MDS
+(\rsec{\ref{sec:mds}}) can 
+construct an embedding for $D$. For details, please see 
+\rsec{\ref{sec:isomap}}. 
+
+Although we have not found other widely used enhancements
+in literature, the discussion here do reveal other possibilities. 
+For example, what will be the result if we plug in effective 
+resistance as distance and fit in later SE stage? The effective 
+resistance is closely related with commute time\cite{lau-2012-spectral-ln}. 
+If it yield good results in practice, justification will not 
+be hard. 
+
+% and conductance
 
 \subsection{Spectral Embeding}
 
@@ -242,7 +462,11 @@ first type, i.e. the embedding like algorithms.
 \label{sec:ncut}
 [shi]
 
-\subsection{Ratio Cut}
+\subsection{Normalized Association}
+\label{sec:nassoc}
+[shi]
+
+\subsection{Ratio Cut}	
 [von]
 
 \subsection{Conductance}
