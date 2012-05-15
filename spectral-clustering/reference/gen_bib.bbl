@@ -30,6 +30,12 @@ Pili Hu.
   https://github.com/hupili/tutorial/tree/master/matrix-calculus, 3 2012.
 \newblock HU, Pili's tutorial collection.
 
+\bibitem{hu2012-spectral2hop}
+Pili Hu.
+\newblock Spectral techniques for community detection on 2-hop topology.
+\newblock GitHub, https://github.com/hupili/Spectral-2Hop, 4 2012.
+\newblock course project of CUHK/CSCI5160.
+
 \bibitem{hu-tutorial}
 Pili Hu.
 \newblock Tutorial collection.
@@ -62,6 +68,11 @@ J.~Shi and J.~Malik.
 \newblock Normalized cuts and image segmentation.
 \newblock {\em Pattern Analysis and Machine Intelligence, IEEE Transactions
   on}, 22(8):888--905, 2000.
+
+\bibitem{von2007tutorial}
+U.~Von~Luxburg.
+\newblock A tutorial on spectral clustering.
+\newblock {\em Statistics and Computing}, 17(4):395--416, 2007.
 
 
 \end{thebibliography}
