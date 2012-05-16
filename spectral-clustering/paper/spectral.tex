@@ -36,7 +36,7 @@
 
 %>============================================
 \pagebreak
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
 \tableofcontents
 \pagebreak
 %<=======TOC ENd==============================
@@ -459,6 +459,11 @@ described in the last section. Besides, enhancements may
 have already been performed. Regardless of their origins, 
 we treat them as the adjacency matrix of similarity graph. 
 
+The output of SE stage is usually an $ N \times d $ matrix $ Y $.
+The columns of $ Y $ are $ d $ eigen vectors(or scaled version). 
+The $ N $ rows of $ Y $ provides a $ d $-dimensional Euclidean 
+embedding. 
+
 \subsubsection{Diagonal Shifting}
 
 Although off-diagonals of $A$ are defined to be affinity / similarity / 
@@ -778,28 +783,32 @@ is needed for convergence.
 \section{Spectral Clustering Justification}
 \label{sec:justification}
 
-\subsection{Random Walk}
-[von]
+\subsection{Combinatoric Justification}
 
-\subsection{Normalized Cut}
+
+\subsubsection{Normalized Cut}
 \label{sec:ncut}
 [shi]
 
-\subsection{Normalized Association}
+\subsubsection{Normalized Association}
 \label{sec:nassoc}
 [shi]
 
-\subsection{Ratio Cut}	
+\subsubsection{Ratio Cut}	
 \label{sec:rcut}
 [von]
 
-\subsection{Conductance}
+\subsubsection{Conductance}
 \label{sec:conductance}
 [von]
 
-\subsection{Weighted Cut}
+\subsubsection{Weighted Cut}
 \label{sec:wcut}
 [Dhillon]
+
+\subsection{Random Walk}
+[von]
+
 
 \subsection{Matrix Perturbation}
 \label{sec:mper}
