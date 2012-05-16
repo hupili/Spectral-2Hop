@@ -24,6 +24,7 @@ declare -a LIB_BIB=( \
 "/home/hpl/library/database/machine-learning/mylibrary.bib" 
 "/home/hpl/library/database/spectral-algorithm/mylibrary.bib" 
 "/home/hpl/library/database/data-mining/mylibrary.bib" 
+"/home/hpl/library/database/social-network/mylibrary.bib" 
 )
 
 rm -f tmp/all.bib

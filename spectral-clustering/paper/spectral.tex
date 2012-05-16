@@ -10,6 +10,8 @@
 %notation shortcuts
 \newcommand{\nL}{\mathcal{L}}
 \newcommand{\nA}{\mathcal{A}}
+\newcommand{\sym}[1]{#1_{\text{sym}}}
+\newcommand{\rw}[1]{#1_{\text{rw}}}
 
 \usepackage{subfigure}
 
@@ -319,6 +321,7 @@ metric matrix, even the best embedding technique helps little.
 %    \mathcal{L}$
 
 \subsubsection{High Dimensional Data}
+\label{sec:metric_hdd}
 
 For high dimensional data, the following ways can be 
 applied to obtain a graph representation:
@@ -423,6 +426,7 @@ pass the double centered version $-\frac{1}{2}JD^{(2)}J$
 to next stage. 
 
 \subsubsection{Enhancements}
+\label{sec:enhance}
 
 The above sections discussed the basic formulation of an 
 adjacency matrix $A$. They can be fit direcly into SE
@@ -449,7 +453,281 @@ be hard.
 
 \subsection{Spectral Embeding}
 
+This stage takes a weighted graph adjacency matrix as input. 
+The matrix can be derive from several starting points as 
+described in the last section. Besides, enhancements may 
+have already been performed. Regardless of their origins, 
+we treat them as the adjacency matrix of similarity graph. 
 
+\subsubsection{Diagonal Shifting}
+
+Although off-diagonals of $A$ are defined to be affinity / similarity / 
+inner product, the definition of diagonal varies in different contexts. 
+
+In spectral community, the diagonals are interpreted as self-loops, 
+and they play little role in objective definition. For example, 
+in Normalized Cut (\rsec{\ref{sec:ncut}}), self-loops does not 
+influence the cut and their influence on the volume of each cluster 
+is mighty, which could be absorbed into more general framwork
+(\rsec{\ref{sec:wcut}}). So a natural operation is to zero out
+those self-loops as is in most SC literature. 
+
+In machine learning community, $A$ is more probably expected to be
+a inner product matrix. In other words, it is Positive SemiDefinite(PSD). 
+In the language of kernels, it is a valid Gram matrix. For example, 
+in \rsec{\ref{sec:metric_hdd}}, we use the Gaussian kernel
+$A_{ij} = \exp\{-||x_i-x_j||^2/t\}$ to weight edges. If we stick to 
+this equation, $A_{ii} = 1$. That means a vertex has highest similarity 
+with itself, which is naturally right. Most importantly, 
+$A$ may now be PSD and fits some DR techniques like MDS
+(\rsec{\ref{sec:mds}}), kernel PCA (\rsec{\ref{sec:kpca}}), etc. 
+If we zero out the diagonals, those algorithms can also be invoked 
+and probably still output good results. However, the justification 
+will be different. 
+%we lose justification 
+%because the precondition of those algorithms are changed. 
+
+Despite this operational difference, we notice that they yield 
+essentially the same result following a diagonal shifting procedure
+\cite{dhillon2004unified}:
+\begin{equation}
+	A' = \sigma I + A
+\end{equation}
+where $\sigma = 1$ in our Gaussian kernel example. 
+With large enough $\sigma$, any $A$ can be transformed to 
+an equivalent PSD version by linear algebraic argument. 
+The only difference between $A$ and $A'$ is that they 
+have different eigenvalues. Their eigenvectors are 
+essentially the same. 
+%In our embedding context, eigenvectors
+%are the major concern (although eigen values are also 
+%important if scaling is performed), so we adopt the 
+%machine learning view of $A$. 
+
+\subsubsection{Adjacency or Laplacian}
+
+We define the degree matrix $R$ to be a diagonal matrix with 
+$R_{ii} = \sum_j{A_{ij}}$. The Laplacian is defined as:
+\begin{equation}
+	L = R - A
+	\label{eq:def_lap}
+\end{equation}
+
+The use of adjacency or Laplacian is closely related with 
+the justification. For adjacency matrix, the normalized version 
+has analogy to a transition matrix of a Markov process. 
+Besides, the adjacency matrix series SET often has 
+angule preserving justification. 
+For Laplacian, its variations may appear in cut or conductance
+like objectives. 
+
+Moreover, the Laplacian is PSD:
+\begin{eqnarray}
+	\tran{x}Lx &=& \sum_i (\sum_j{A_{ij}})x_i^2
+		- \sum_{ij}A_{ij}x_ix_j \nonumber \\
+		&=& \frac{1}{2} \sum_i\sum_j{A_{ij}}(x_i^2+x_j^2) 
+		- \sum_{ij}A_{ij}x_ix_j \nonumber \\
+		&=& \frac{1}{2} \sum_i\sum_j{A_{ij}}(x_i-x_j)^2 \ge 0
+\end{eqnarray}
+and Laplacian has $\vec{1}$ as an eigen vector with smallest eigen 
+value 0:
+\begin{equation}
+	L \vec{1} = 0 \vec{1}
+\end{equation}
+In practice, the first eigen vector of Laplacian (or variations) is 
+ignored, and successive smallest eigen vectors are used. For adjacency 
+matrix, the first largest eigen vectors are used. This is natural 
+due to the negation in \req{\ref{eq:def_lap}}. 
+
+We leave further discussion of the use of adjacency or Laplacian 
+to \rsec{\ref{sec:justification}} where the context is more clear. 
+
+\subsubsection{Normalization}
+
+The intuition of normalization comes in two folds:
+\begin{itemize}
+	\item In spectral graph theory justifications, like 
+	Ratio Cut (\rsec{\ref{sec:rcut}}), 
+	Normalized Cut (\rsec{\ref{sec:ncut}}), 
+	Weighted Cut (\rsec{\ref{sec:wcut}}), 
+	the normalization can be interpreted as assigning 
+	different importance to nodes. For example, 
+	all 1's in Rcut and degree in Ncut. The general normalization 
+	can be described by a weighting matrix $W$ with corresponding 
+	weights on the diagonal. 
+	\item In random walk series justifications, the walk matrix 
+	is required to be row-stochastic. Thus $W=R$ and left 
+	normalization is the standard operation. 
+\end{itemize}
+
+We follow similar notations as \cite{von2007tutorial} and 
+collect possible normalization operations in \rtbl{\ref{tbl:normalization}}. 
+
+\begin{table}[htb]
+	\label{tbl:normalization}
+	\centering
+	\caption{Normalization}
+	\begin{tabular}{c|c|c}
+		\hline
+		Normalization & Adjacency & Laplacian \\
+		\hline
+		Unnormalized & $A$ & $L$ \\
+		Symmetric normalized & $\sym{A}=W^{-\frac{1}{2}}AW^{-\frac{1}{2}}$ 
+			& $\sym{L}=W^{-\frac{1}{2}}LW^{-\frac{1}{2}}$ \\
+		Left normalized & $\rw{A}=W^{-1}A$ & $\rw{L}=W^{-1}A$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+Assume $ \lambda, \sym{\lambda}, \rw{\lambda} $ are eigenvalues
+of $ A, \sym{A}, \rw{A} $ with corresponding eigen vectors 
+$ v, \sym{v}, \rw{v} $, their relationship can be shown through 
+the following array of equations:
+\begin{eqnarray}
+	Av &=& \lambda v \label{eq:eiga}\\
+	W^{-1} A \rw{v} = \rw{A} \rw{v} &=& \rw{\lambda} \rw{v} \\
+	A \rw{v} &=& \rw{\lambda} W\rw{v} \label{eq:eigarw1}\\
+	W^{-\frac{1}{2}} W^{-\frac{1}{2}} A 
+	W^{-\frac{1}{2}} W^{\frac{1}{2}} \rw{v}
+	= \rw{A} \rw{v} 
+	&=& \rw{\lambda} \rw{v} \\
+	\sym{A}(W^{\frac{1}{2}} \rw{v}) &=& 
+	\rw{\lambda}(W^{\frac{1}{2}} \rw{v}) \label{eq:eigarw2}\\
+	\sym{A} \sym{v} &=& \sym{\lambda} \sym{v} \label{eq:eigasym}
+\end{eqnarray}
+
+Comparing \req{\ref{eq:eiga}} and \req{\ref{eq:eigarw1}}, we can see that 
+left normalized version corresponds to solving a generalized eigen
+problem $ (A, W) $. It's obvious normalization makes a big difference 
+in practice. On the other hand, there is only slight difference 
+between two types of normalization. 
+Comparing \req{\ref{eq:eigarw2}} and \req{\ref{eq:eigasym}}, 
+we know that they have the same eigen values and their eigen vectors
+differ by a scaling of $ W^{\frac{1}{2}} $. 
+
+Similar relationship holds for $ L, \sym{L}, \rw{L} $. 
+
+In the literatures, e.g. \cite{belkin2003laplacian}
+\cite{shi2000normalized}, $ \sym{L} $ often appears as 
+one intermediate step due to variable substitution and 
+eigen vector of $ \rw{L} $ is usually the final result. 
+
+It's worth to note that which normalization to use is 
+coupled with stages before and after
+and is also related to justification angle. It's very hard to 
+reach a general conclusion. For example, Ng\cite{ng2002spectral}
+actually uses a symmetric normalization and Shi\cite{shi2000normalized}
+uses a left normalization. In \cite{ng2002spectral}, Ng 
+claimed superior performance. On the other hand, Luxburg
+recommend left normalization in general(\cite{von2007tutorial} ch8). 
+Some comparisons may be ill-posed because involved algorithms 
+may use different matrix type and do different post-processing 
+on eigenvectors. All the details contribute to performance 
+differences on varied application scenarios. 
+
+\subsubsection{Eigen Value Decomposition}
+
+Eigen Value Decomposition (EVD) and Singular Value Decomposition (SVD)
+are two important subroutines in SET. They are algebraically related
+\cite{wki_svd}:
+\begin{eqnarray}
+	X &=& U \Sigma \tran{V} \\
+	X\tran{X} &=& U \Sigma \tran{V} V \Sigma \tran{U} \\
+	(X\tran{X}) U &=& U \Sigma^2 
+\end{eqnarray}
+Similarly, 
+\begin{equation}
+	(\tran{X}X) V = V \Sigma^2 
+	\label{eq:svd_evd_rel}
+\end{equation}
+
+Now suppose $ X = [x_1, x_2, \ldots, x_N] $ is our data matrix. 
+Some authors view PCA(\rsec{\ref{sec:pca}}) 
+as an SVD on $ X $ (\cite{borg2005modern} ch24). 
+Others view PCA (\rsec{\ref{sec:pca}}) EVD on $ \tran{X}X $. 
+\req{\ref{eq:svd_evd_rel}} shows that they yield the 
+same embedding $ V $. 
+
+In our framework, the current SE step take adjacency matrix
+(or Laplacian) as input. It is essentially a matrix containing 
+pairwise information. So EVD is performed in this stage. 
+The comparison of EVD and SVD in this section is to show that 
+under some SET's settings, the explicit construction of an 
+equivalent similarity matrix (metric formulation in our framework)
+can be omitted. 
+
+\subsubsection{Scaling and Projection}
+
+The scaling and projection described earlier are 
+both regarded as post-processing of eigen vectors. 
+For example, MDS(\rsec{\ref{sec:mds}}) and Brand's algorithm
+\cite{brand2003unifying} scale the eigenvectors by square root
+eigenvalues; Ng's algorithm \cite{ng2002spectral} projects 
+the coordinates given by eigenvectors to unit sphere. 
+A per case justification and discussion is better and 
+we leave it to \rsec{\ref{sec:justification}}. 
+
+Despite of their own rationale, we provide one possible interpretation 
+of scaling. Consider 0/1 version adjacency matrix $ A $. If we raise it to the power
+$ A^k $, the entry $ (A^k)_{ij} $ just counts the number of $ k $-hop paths 
+from $ i $ to $ j $. 
+We call the graph corresponding to $ A^k $ as the "k-th order connectness graph". 
+The original matrix power is only defined for 
+integer $ k $. We notationally generalize it in the following way:
+(for symmetric $ A $)
+\begin{eqnarray}
+	A^k &=& (U \Lambda \tran{U})^k = U \Lambda^k \tran{U} \\
+	A^x &=& U \Lambda^x \tran{U} 
+\end{eqnarray}
+where $ x $ is a real value and 
+$ \Lambda^x = \text{diag}(\lambda_1^x, \lambda_2^x, \ldots, \lambda_N^x) $. 
+With this generalization, we can define eigen value scaling as 
+a standard procedure of post-processing. For non-scaled algorithms, 
+just let $ x=0 $. This can be interpreted as working on the $ x $-th
+power of adjacency matrix. It has the same effect if we raise the matrix
+to the $ x $-th power in the enhancement stage(\rsec{\ref{sec:enhance}}). 
+
+The justification for $ x $-th power is: $ x $ controls the degree
+of graph distance we want to capture. For example, when $ x \rightarrow \infty $, 
+by the argument of power method, only the eigenvector with largest eigenvalue 
+(principal eigenvector) is "kept". So the principal eigenvector provides 
+the embedding which captures very "distant" relationships. The successive 
+eigenvectors provides embedding which captures nearer and nearer relationships. 
+
+This justification has an analogy. Katz\cite{katz1953catzindex}
+provided an index to measure similarities of vertices in graphs:
+(\cite{aggarwal2011social} ch2.2)
+\begin{equation}
+	\text{Katz}(i,j) = \sum_{k=1}^{\infty}{\beta^k (A^k)_{ij}}
+	\label{eq:katz}
+\end{equation}
+The Katz Index takes all "k-th order connectness graph" into consideration
+and the decaying factor $ \beta $ imposes 
+a preference between near and distant connectness
+relationship. 
+
+One may think to scale the eigen vectors by a polynomial or 
+more generally a function of eigen values, i.e.
+\begin{equation}
+	U f(\Lambda)
+\end{equation}
+This operation risk losing good justifications. In our survey, 
+we have only seen three choice of $ f $:
+\begin{itemize}
+	\item 0. It corresponds to the non-scaled case. 
+	\item $ \Lambda^{\frac{1}{2}} $. This operation often roots 
+	from an error energy minimization / low-rank approximation
+	view point(\rsec{\ref{sec:lrapprox}}).
+	\item Katz polynomial(\req{\ref{eq:katz}}). On one hand, 
+	it has good justification by considering all length's 
+	connectness. On the other hand, we have a closed form for 
+	\req{\ref{eq:katz}}:\cite{aggarwal2011social}
+		\begin{equation}
+			\text{Katz} = (I - \beta A)^{-1} - I
+		\end{equation}
+\end{itemize}
+Nevertheless, seeking for an application tailored $ f(\Lambda) $
+with good justification is still open work for practitioners. 
 
 \subsection{Clustering}
 
@@ -512,15 +790,23 @@ is needed for convergence.
 [shi]
 
 \subsection{Ratio Cut}	
+\label{sec:rcut}
 [von]
 
 \subsection{Conductance}
+\label{sec:conductance}
 [von]
 
+\subsection{Weighted Cut}
+\label{sec:wcut}
+[Dhillon]
+
 \subsection{Matrix Perturbation}
+\label{sec:mper}
 [andrew ng]
 
 \subsection{Low Rank Approximation}
+\label{sec:lrapprox}
 [matthew brand]
 
 \subsection{Density Estimation View}
@@ -558,12 +844,19 @@ view pseudo inverse of graph Laplacian by commute times on graphs.
 \subsection{Kernel PCA}
 \label{sec:kpca}
 
+\section{Unifying Views}
+
 \subsection{Kernel Framework}
 \label{sec:kfx}
 
 \subsection{Graph Framework}
-\label{gfx}
+\label{sec:gfx}
 
+\subsection{Trace Maximization}
+\label{sec:trmax}
+
+\subsection{Kernel K-means}
+\label{sec:kkmean}
 
 \section{Conclusion}
 \label{sec:conclusion}

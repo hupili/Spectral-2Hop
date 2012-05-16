@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{aggarwal2011social}
+C.C. Aggarwal.
+\newblock {\em Social network data analytics}.
+\newblock Springer-Verlag New York Inc, 2011.
+
 \bibitem{andersen2007detecting}
 R.~Andersen and F.~Chung.
 \newblock Detecting sharp drops in pagerank and a simplified local partitioning
@@ -39,6 +44,11 @@ M.~Brand and K.~Huang.
 F.~Chung.
 \newblock Random walks and local cuts in graphs.
 \newblock {\em Linear Algebra and its applications}, 423(1):22--32, 2007.
+
+\bibitem{dhillon2004unified}
+I.~Dhillon, Y.~Guan, and B.~Kulis.
+\newblock A unified view of kernel k-means, spectral clustering and graph cuts.
+\newblock Technical report, Univ. of Texas at Austin, 2004.
 
 \bibitem{hadley1992efficient}
 S.W. Hadley, B.L. Mark, and A.~Vannelli.
@@ -80,6 +90,11 @@ H.~Jiawei and M.~Kamber.
 R.~Kannan, S.~Vempala, and A.~Vetta.
 \newblock On clusterings: Good, bad and spectral.
 \newblock {\em Journal of the ACM (JACM)}, 51(3):497--515, 2004.
+
+\bibitem{katz1953catzindex}
+L.~Katz.
+\newblock A new status index derived from sociometric analysis.
+\newblock {\em Psychometrika}, 18(1):39--43, 1953.
 
 \bibitem{lau-2012-spectral-ln}
 Lap~Chi Lau.
@@ -152,4 +167,8 @@ U.~Von~Luxburg.
 	
 \bibitem{wiki_cos}
 	Wikipedia, Cosine Similarity, 
-	\url{http://en.wikipedia.org/wiki/Cosine_similarity}\end{thebibliography}
+	\url{http://en.wikipedia.org/wiki/Cosine_similarity}
+	
+\bibitem{wki_svd}
+	Wikipedia, Singular Value Decomposition
+	\url{http://en.wikipedia.org/wiki/Singular_value_decomposition}\end{thebibliography}
