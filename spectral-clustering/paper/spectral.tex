@@ -12,6 +12,10 @@
 \newcommand{\nA}{\mathcal{A}}
 \newcommand{\sym}[1]{#1_{\text{sym}}}
 \newcommand{\rw}[1]{#1_{\text{rw}}}
+\newcommand{\cut}[1]{\text{cut}(#1)}
+\newcommand{\assoc}[1]{\text{assoc}(#1)}
+\newcommand{\vol}[1]{\text{vol}(#1)}
+
 
 \usepackage{subfigure}
 
@@ -533,6 +537,7 @@ Moreover, the Laplacian is PSD:
 		&=& \frac{1}{2} \sum_i\sum_j{A_{ij}}(x_i^2+x_j^2) 
 		- \sum_{ij}A_{ij}x_ix_j \nonumber \\
 		&=& \frac{1}{2} \sum_i\sum_j{A_{ij}}(x_i-x_j)^2 \ge 0
+		\label{eq:lap_psd}
 \end{eqnarray}
 and Laplacian has $\vec{1}$ as an eigen vector with smallest eigen 
 value 0:
@@ -783,28 +788,112 @@ is needed for convergence.
 \section{Spectral Clustering Justification}
 \label{sec:justification}
 
+In this section, we collect justifications from different authors. 
+We will see that not all of the combinations provided in 
+\rsec{\ref{sec:framework}} have corresponding justifications. 
+
 \subsection{Combinatoric Justification}
+
+The traditional and most widely study is combinatoric justification. 
+The idea is centered on the concept of "cut". This section is 
+assembled from 
+\cite{shi2000normalized}
+\cite{von2007tutorial}
+\cite{dhillon2004unified}. 
+
+\subsubsection{Cut}
+
+Suppose $ C_1 $ and $ C_2 $ are two subsets of $ V $. 
+The cut between $ C_1 $ and $ C_2 $ is defined as:
+\begin{equation}
+	\cut{C_1, C_2} = \sum_{u \in C_1, v \in C_2, (u,v) \in E}{A_{uv}}
+\end{equation}
+The association of $ C_1 $, namely the (weighted) edges 
+inside $ C_1 $ is defined as:
+\begin{equation}
+	\assoc{C_1} = \cut{C_1, C_1} =  \sum_{u,v \in C_1, (u,v) \in E}{A_{uv}}
+\end{equation}
+The volume of $ C_1 $ is defined as:
+\begin{equation}
+	\vol{C_1} = \cut{C_1, V} = \sum_{u \in C_1, v \in V, (u,v) \in E}{A_{uv}}
+	 = \sum_{v \in C_1}{d(v)}
+\end{equation}
+where $ d(v) = \sum_{u \in V}{A_{vu}} $ is the degree of vertex $ v $. 
+
+The most straightforward trial to obtain a good clustering is 
+given by the following optimization problem:
+\begin{equation}
+	\minimize_{\{C_1, C_2, \ldots, C_k\}}{ \sum_{i=1}^{k}{\cut{C_i, V-C_i}} }
+	\label{eq:cut_def}
+\end{equation}
+Using \req{\ref{eq:lap_psd}}, it can be converted to an equivalent form:
+\begin{equation}
+	\minimize_{\{C_1, C_2, \ldots, C_k\}}{ \sum_{i=1}^{k}
+	{ \tran{\chi_{C_i}} L \chi_{C_i} } }
+\end{equation}
+where $ \chi_{C_i} $ is the characteristic vector of $ C_i $, defined as:
+\begin{equation}
+%good the following example is copied from 
+%http://scienceforums.com/topic/6417-latex-fomulas-math-v20/
+%y=\left\lbrace\begin{array}{c c}{2x+5} & 
+%\text{if x is less then 1/2} \\ {\pi{x}}^e & 
+%\text{if x is more then 1}\end{array}\right. 
+%then I known how to typeset this kind of equation nicely.
+	\chi_{C_i}(v)= \left\lbrace
+	\begin{array}{c c}
+		1 &  v \in C_i \\
+		0 &  \text{Else} 
+	\end{array}\right.
+\end{equation}
+A more compact form of the above objective is:
+\begin{equation}
+	\minimize_{\{C_1, C_2, \ldots, C_k\}}{ \tr{ \tran{\chi} L \chi } }
+\end{equation}
+where $ \chi = [\chi_{C_1}, \chi_{C_2}, \ldots , \chi_{C_k}] $. 
+This kind of combinatoric problem is shown to be NP-Hard by previous authors. 
+Using standard spectral argument\cite{von2007tutorial}, 
+we have one important observation that if the graph is diconnected 
+and contains $ k $ connected components, the first $ k $ eigen vectors 
+of Laplacian (count from smallest eigen value) are just the linear 
+combination of the characteristic vectors of those connected components. 
+In other words, in such ideal case, those eigen vectors are piecewise linear. 
+Standard clustering algorithms in Euclidean space can easily 
+give the right clustering. So one heuristic is to relax the problem 
+to permit real values, i.e. substitute $ \chi_{C_i} $ by $ v_i $:
+\begin{equation}
+	\minimize_{v_i \in \mathbb{R}^N, V=(v_1,v_2, \ldots , v_N) }{ \tr{ \tran{V} L V } }
+	\label{eq:cut_relax}
+\end{equation} 
+
+Now we find the problem of \req{\ref{eq:cut_relax}} is poorly-defined. 
+Without further constraints, the choice $ V=0 $ yield the minimum
+but it's obviously contrary to our real objective. Note that the unrelaxed
+version is well-defined, for the value of $ \chi_{C_i} $ is constrained 
+to $ \{0,1\} $. Certain "normalization" helps to well define our objective. 
+In the following part of this section, we'll see 
+how different normalization induce different objectives. 
+
+\subsubsection{Ratio Cut}	
+\label{sec:rcut}
+%[von]
+
 
 
 \subsubsection{Normalized Cut}
 \label{sec:ncut}
-[shi]
+%[shi]
 
 \subsubsection{Normalized Association}
 \label{sec:nassoc}
-[shi]
-
-\subsubsection{Ratio Cut}	
-\label{sec:rcut}
-[von]
+%[shi]
 
 \subsubsection{Conductance}
 \label{sec:conductance}
-[von]
+%[von]
 
 \subsubsection{Weighted Cut}
 \label{sec:wcut}
-[Dhillon]
+%[Dhillon]
 
 \subsection{Random Walk}
 [von]
