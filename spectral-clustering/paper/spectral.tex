@@ -796,7 +796,7 @@ We will see that not all of the combinations provided in
 
 The traditional and most widely study is combinatoric justification. 
 The idea is centered on the concept of "cut". This section is 
-assembled from 
+adapted from 
 \cite{shi2000normalized}
 \cite{von2007tutorial}
 \cite{dhillon2004unified}. 
@@ -807,11 +807,6 @@ Suppose $ C_1 $ and $ C_2 $ are two subsets of $ V $.
 The cut between $ C_1 $ and $ C_2 $ is defined as:
 \begin{equation}
 	\cut{C_1, C_2} = \sum_{u \in C_1, v \in C_2, (u,v) \in E}{A_{uv}}
-\end{equation}
-The association of $ C_1 $, namely the (weighted) edges 
-inside $ C_1 $ is defined as:
-\begin{equation}
-	\assoc{C_1} = \cut{C_1, C_1} =  \sum_{u,v \in C_1, (u,v) \in E}{A_{uv}}
 \end{equation}
 The volume of $ C_1 $ is defined as:
 \begin{equation}
@@ -861,9 +856,12 @@ Standard clustering algorithms in Euclidean space can easily
 give the right clustering. So one heuristic is to relax the problem 
 to permit real values, i.e. substitute $ \chi_{C_i} $ by $ v_i $:
 \begin{equation}
-	\minimize_{v_i \in \mathbb{R}^N, V=(v_1,v_2, \ldots , v_N) }{ \tr{ \tran{V} L V } }
+	\minimize_{v_i \in \mathbb{R}^N, \tran{v_i}v_j = 0 V=(v_1,v_2, \ldots , v_N) }
+	{ \tr{ \tran{V} L V } }
 	\label{eq:cut_relax}
 \end{equation} 
+The orthogonal condition $ \tran{v_i}v_j = 0 $ is inherited from 
+the fact that characteristic vectors are orthogonal. 
 
 Now we find the problem of \req{\ref{eq:cut_relax}} is poorly-defined. 
 Without further constraints, the choice $ V=0 $ yield the minimum
@@ -877,23 +875,193 @@ how different normalization induce different objectives.
 \label{sec:rcut}
 %[von]
 
+The first attempt of normalization is to constrain $ V $ 
+to unit vectors. In this way, the following optimization 
+problem can absorb proportional scaling of $ V $
+and also prevent the trivial solution mentioned above:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{\tran{v_i}Lv_i} } \nonumber \\
+	s.t. && \tran{v_i}v_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:rcut_opt1}
+\end{eqnarray}
+
+This problem is equivalent to the following one:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{ \frac{\tran{v_i}Lv_i}{\tran{v_i}v_i} } } \nonumber \\
+	s.t. && \tran{v_i}v_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:rcut_opt2}
+\end{eqnarray}
+Suppose we have a solution given by $ \{v^*_i\} $. Then 
+$ \{t_i v^*_i\}, \forall t_i \in \mathbb{R}^N $ induce the 
+same objective by linear algebraic argument. Then the problem can be 
+tackled in two steps:
+\begin{enumerate}
+	\item Solve: 
+		\begin{eqnarray}
+			\minimize_{v_i \in \mathbb{R}^N} 
+			&& { \sum_{i=1}^{k}{ \frac{\tran{v_i}Lv_i}{\tran{v_i}v_i} } } \nonumber \\
+		 s.t. && \tran{v_i}v_j = 0, \forall i \ne j 
+		 \text{~and~} i,j=1,2,\ldots,k\label{eq:rcut_opt3}
+		\end{eqnarray}
+	\item Scale $ v_i $ so that $ \tran{v_i}v_i = 1 $.
+\end{enumerate}
+The second step is easy, so we focus on the first step. 
+By applying the result of Rayleigh Quotient
+repeatedly\cite{lau-2012-spectral-ln}, it can be shown the solution 
+is given by the $ k $ smallest eigenvectors of $ L $. 
+
+Like the above section, \req{\ref{eq:rcut_opt3}} is a relaxed version 
+of some problem. By reverting the relaxation process, we can find 
+the combinatoric justification it corresponds to. Now we 
+substitue orthogonal $ \{v_i\} $ in \req{\ref{eq:rcut_opt3}} 
+with characteristic vector $ \{\chi_{C_i}\} $ to see its
+combinatoric version:
+\begin{eqnarray}
+	&&\sum_{i=1}^{k}{ \frac{\tran{\chi_{C_i}} L \chi_{C_i}}{\tran{\chi_{C_i}}\chi_{C_i}} }
+		\nonumber \\
+	&=&	\sum_{i=1}^{k}
+		{ \frac{\sum_{(u,v) \in E}{A_{uv}(\chi_{C_i}(v) - \chi_{C_i}(u))^2}}
+		{|C_i|} } \nonumber \\
+	&=&	\sum_{i=1}^{k}
+		{ \frac{\sum_{(u,v) \in E,u \in C_i, v \in V-C_i}{A_{uv}}}
+		{|C_i|} } \nonumber \\
+	&=&	\sum_{i=1}^{k}
+		{ \frac{\cut{C_i, V-C_i}}
+		{|C_i|} } 
+	\label{eq:rcut_com}
+\end{eqnarray}
+
+Note that the last line in \req{\ref{eq:rcut_com}} is right the definition 
+of Ratio Cut(RCut), given a clustering $ \{C_1, C_2, \ldots, C_k\} $. Comparing
+it to our first objective, Cut(\req{\ref{eq:cut_def}}), we find that 
+RatioCut takes cluster size into consideration. This is more reasonable 
+if we consider the existence of outliers. In the extreme case, one 
+outlier may have no connection with other points. The Cut objective 
+will induce a singleton cluster for this outlier. However, RCut 
+may tend to partition the graph into bigger clusters, which is more 
+close to our goal. 
 
 
 \subsubsection{Normalized Cut}
 \label{sec:ncut}
 %[shi]
 
-\subsubsection{Normalized Association}
-\label{sec:nassoc}
-%[shi]
+Normalized Cut(NCut) is another widely studied combinatoric objective. 
+Following the same approach as last section, we can derive 
+its combinatoric version and relaxed version. 
 
-\subsubsection{Conductance}
-\label{sec:conductance}
-%[von]
+The definition of NCut is:
+\begin{equation}
+	\text{NCut} = \sum_{i=1}^{k}{ \frac{\cut{C_i, V-C_i}}{\vol{C_i}} } 
+\end{equation}
+Its corresponding relaxed version is:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{\tran{v_i}Lv_i} } \nonumber \\
+	s.t. && \tran{v_i}Rv_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:ncut_opt}
+\end{eqnarray}
+where $ R $ is the degree matrix. 
+
+From the optimization perspective, 
+the difference between RCut and NCut is that the normalization 
+constraints are $ \tran{v_i}Iv_i = 1 $ and $ \tran{v_i}Rv_i = 1 $, 
+respectively. From the combinatoric perspective, NCut takes the 
+"importance" of vertices into consideration while RCut does
+not distinguish them. The "importance" here is expressed using 
+degree of nodes. In \rsec{\ref{sec:wcut}}, we'll see a generalzation.  
 
 \subsubsection{Weighted Cut}
 \label{sec:wcut}
 %[Dhillon]
+
+The Cut defined in \req{\ref{eq:cut_def}} can capture the linkage 
+between clusters. Minimizing it should result in reasonable clustering. 
+However, in real applications, vertices may be of different 
+importance. If we denote the vertex weight by diagonal entries of $ W $, 
+the normalization constraint $ \tran{v_i}Wv_i = 1 $ has a more general 
+combinatoric correspondance:
+\begin{equation}
+	\text{WCut} = \sum_{i=1}^{k}{ \frac{\cut{C_i, V-C_i}}{W(C_i)} } 
+\end{equation}
+where $ W(C_i) = \sum_{v \in C_i}{W_{vv}} $. 
+
+By letting $ W=I $ or $ W=D $, it degrades to RCut and NCut, respectively. 
+
+\subsubsection{Ratio/Normalized/Weighted Association}
+\label{sec:nassoc}
+%[shi]
+
+Recall the Cut series objectives try to minimize the 
+inter cluster linkage. Likewise, one may think to maximize 
+the intra cluster linkage, given by
+the association: %of $ C_1 $:
+\begin{equation}
+	\assoc{C_1} = \cut{C_1, C_1} =  \sum_{u,v \in C_1, (u,v) \in E}{A_{uv}}
+\end{equation}
+
+The Ratio Association(RAssoc) is defined as:
+\begin{eqnarray}
+	\text{RAssoc} &=& \sum_{i} \frac{ \assoc{C_i}}{|C_i|} 
+%	\nonumber \\
+%	&=& \sum_{i} \frac{ \cut{C_i, V} - \cut{C_i,V - C_i}}{|C_i|}
+\end{eqnarray}
+We can derive its corresponding relaxed optimization:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{\tran{v_i}Av_i} } \nonumber \\
+	s.t. && \tran{v_i}v_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:rassoc_opt}
+\end{eqnarray}
+The Normalized Association(NAssoc) is defined as:
+\begin{eqnarray}
+	\text{NAssoc} &=& \sum_{i} \frac{ \assoc{C_i}}{\vol{C_i}} 
+\end{eqnarray}
+We can derive its corresponding relaxed optimization:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{\tran{v_i}Av_i} } \nonumber \\
+	s.t. && \tran{v_i}Dv_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:nassoc_opt}
+\end{eqnarray}
+Of course, the Weighted Association(WAssoc) is defined as:
+\begin{eqnarray}
+	\text{WAssoc} &=& \sum_{i} \frac{ \assoc{C_i}}{W(C_i)} 
+\end{eqnarray}
+We can derive its corresponding relaxed optimization:
+\begin{eqnarray}
+	\minimize_{v_i \in \mathbb{R}^N} 
+	&& { \sum_{i=1}^{k}{\tran{v_i}Av_i} } \nonumber \\
+	s.t. && \tran{v_i}Wv_i = 1, \forall i=1,2,\ldots,k \nonumber \\
+		 && \tran{v_i}v_j = 0, \forall i \ne j \text{~and~} i,j=1,2,\ldots,k\label{eq:wassoc_opt}
+\end{eqnarray}
+
+The difference between association series and cut series is that 
+they use $ A $ and $ L $, respectively. This can justify why 
+decomposing adjacency and Laplacian are both reasonable to 
+get good embedding. However, in our survey, the use of Laplacian 
+is obviously dominant. There are other properties making Laplacian 
+superior that can not be justified using the combinatoric framework
+in this section(see \rsec{\ref{sec:lemap}} for example). 
+
+\subsubsection{Conductance and Expansion}
+\label{sec:conductance}
+%[von]
+
+For the last part of combinatoric justification, we 
+quick note two other criteria: (\cite{lau-2012-spectral-ln}, W2)
+\begin{eqnarray}
+	\text{Expansion} &=& \sum_{i}{\frac{\cut{C_i,V-C_i}}{\min\{|C_i|,|V-C_i|\}}} \\
+	\text{Conductance} &=& \sum_{i}{\frac{\cut{C_i,V-C_i}}{\min\{\vol{C_i},\vol{V-C_i}\}}} 
+\end{eqnarray}
+The notion of expasion and conductance is studied in 
+many spectral graph theory problems. They have close analogy 
+to RCut and NCut. However, due to the $ \min $ operator, 
+it becomes more difficult to establish their relaxed version. 
+In our survey so far, there are no sophisticated approach 
+to tackle with the two objectives. 
 
 \subsection{Random Walk}
 [von]
