@@ -1472,6 +1472,23 @@ in \ralg{\ref{alg:lemap}}.
 \subsection{Hessian Eigenmap}
 \label{sec:hemap}
 
+Hessian Eigenmap, also called Hessian Locally Linear Embedding
+\cite{donoho2003hessian}, is shown to have theoretical 
+advantages in embedding. The two assumptions of isomap
+(\rsec{\ref{sec:isomap}}) are relaxed to:
+\begin{itemize}
+	\item Local isometry. In isomap, global isometry is assumed 
+	and geodesic distance is in favour. In Donoho's study, 
+	many image examples are shown to exihbit isometry\cite{donoho2003hessian}. 
+	They keep the isometry assumption but relax it to a local version. 
+	\item Connectedness. In isomap, the assumption that 
+	parametric set is convex does not always hold. Non-convexity
+	can arise naturally for compound shapes. Missing samples 
+	in observation space is also a problem. 
+\end{itemize} 
+
+
+
 \subsection{PCA}
 \label{sec:pca}
 
