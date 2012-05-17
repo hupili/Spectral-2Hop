@@ -378,6 +378,7 @@ different practical problems:
 
 
 \subsubsection{Proximity}
+\label{sec:proximity}
 
 Many real problems has proximity as input. Proximity 
 can be described by similarity or dissimilarity. 
@@ -1322,8 +1323,45 @@ Thus the clustering structure should be more and more clear.
 \section{Other Spectral Embedding Technique}
 \label{sec:nldr}
 
+The origin of this article is spectral clustering, 
+especially the spectral graph theory type of work. 
+In this section, we 
+briefly present some relevant spectral embedding techniques 
+from machine learning community and in 
+\rsec{\ref{sec:unify}} we give several unifying views
+those all of those algorithms. 
+
 \subsection{MDS}
 \label{sec:mds}
+
+The term Multi-Dimensional Scaling(MDS) 
+\cite{cox2008mds} is actually for a set of algorithms. 
+Readers can refer to \cite{wiki_mds} for quick information
+on taxonomy and 
+\cite{borg2005modern} for detailed texts. 
+
+The most relevant one and the simplest form is classical MDS
+(\cite{borg2005modern} ch12). Given a pairwise distance matrix, 
+MDS recovers an embedding in low dimensional Euclidean space, 
+which preserves the given pairwise distance. 
+Involved techniques are already discussed separately in 
+\rsec{\ref{sec:proximity}} and \rsec{\ref{sec:lrapprox}}. In 
+this section, we assemble them to give the algorithm(\ralg{\ref{alg:mds}}). 
+
+\begin{algorithm}[htb]
+	\caption{Multi-Dimensional Scaling}
+	\label{alg:mds}
+	\begin{algorithmic}[1]
+		\REQUIRE Pairwise distance matrix $ D_{N \times N} $; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE $ D^{(2)} \leftarrow$ element wise square of $ D $
+		\STATE $ J = I - \frac{1}{n} \vec{1} \tran{\vec{1}} $
+		\STATE $ A = -\frac{1}{2}JD^{(2)}J $
+		\STATE Eigen decompose $ A = U \Lambda \tran{U} $
+		\STATE $ Y = U_{\hat{d}} (\Lambda_{\hat{d}})^{\frac{1}{2}} $
+	\end{algorithmic}
+\end{algorithm}
 
 \subsection{isomap}
 \label{sec:isomap}
@@ -1345,6 +1383,7 @@ Thus the clustering structure should be more and more clear.
 \label{sec:kpca}
 
 \section{Unifying Views}
+\label{sec:unify}
 
 \subsection{Kernel Framework}
 \label{sec:kfx}
