@@ -1363,7 +1363,8 @@ this section, we assemble them to give the algorithm(\ralg{\ref{alg:mds}}).
 		\STATE $ D^{(2)} \leftarrow$ element wise square of $ D $
 		\STATE $ J = I - \frac{1}{n} \vec{1} \tran{\vec{1}} $
 		\STATE $ A = -\frac{1}{2}JD^{(2)}J $
-		\STATE Eigen decompose $ A = U \Lambda \tran{U} $
+		\STATE EVD $ A = U \Lambda \tran{U} $ 
+		\COMMENT{Descending Eigenvlue}
 		\STATE $ Y = U_{\hat{d}} (\Lambda_{\hat{d}})^{\frac{1}{2}} $
 	\end{algorithmic}
 \end{algorithm}
@@ -1468,6 +1469,7 @@ in \ralg{\ref{alg:lemap}}.
 		\COMMENT{\rsec{\ref{sec:metric_hdd}} }
 		\STATE Obtain left normalized graph Laplacian $ \rw{L} $. 
 		\STATE EVD: $ \rw{L}U = U \Lambda $
+		\COMMENT{Ascending Eigenvlue}
 		\STATE $ Y = U_{\hat{d}} $
 	\end{algorithmic}
 \end{algorithm}
@@ -1565,6 +1567,7 @@ the two operationally different versions of PCA in
 			Dimensionality of embedding space $ \hat{d} $
 		\ENSURE Embedding $ Y_{N \times \hat{d}} $
 		\STATE EVD of covariance matrix: $ X\tran{X} = U \Lambda \tran{U} $
+		\COMMENT{Descending Eigenvlue}
 		\STATE $ Y = \tran{X} U_{\hat{d}} $
 	\end{algorithmic}
 \end{algorithm}
@@ -1577,6 +1580,7 @@ the two operationally different versions of PCA in
 			Dimensionality of embedding space $ \hat{d} $
 		\ENSURE Embedding $ Y_{N \times \hat{d}} $
 		\STATE EVD of covariance matrix: $ \tran{X}X = U \Lambda \tran{U} $
+		\COMMENT{Descending Eigenvlue}
 		\STATE $ Y = U_{\hat{d}} $
 	\end{algorithmic}
 \end{algorithm}
@@ -1630,6 +1634,7 @@ is not performed explicitly. We show the KPCA algorithm in
 		\ENSURE Embedding $ Y_{N \times \hat{d}} $
 		\STATE Construct Gram matrix: $ (G)_{ij} = k(x_i,x_j)$
 		\STATE EVD of covariance matrix: $ G = U \Lambda \tran{U} $
+		\COMMENT{Descending Eigenvlue}
 		\STATE $ Y = U_{\hat{d}} $
 	\end{algorithmic}
 \end{algorithm}
@@ -1707,6 +1712,7 @@ for more details.
 			\STATE $ W_{ij} = 0, \forall j \notin N(i) $
 		\ENDFOR
 		\STATE EVD: $ (I - \tran{W})(I - W) = U \Lambda \tran{U} $
+		\COMMENT{Ascending Eigenvlue}
 		\STATE $ Y = U_{\hat{d}} $
 	\end{algorithmic}
 \end{algorithm}
