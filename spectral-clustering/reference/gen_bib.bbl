@@ -24,6 +24,16 @@ M.~Belkin and P.~Niyogi.
   representation.
 \newblock {\em Neural computation}, 15(6):1373--1396, 2003.
 
+\bibitem{bengio2006spectral}
+Y.~Bengio, O.~Delalleau, N.~Le~Roux, J.F. Paiement, P.~Vincent, and M.~Ouimet.
+\newblock Spectral dimensionality reduction.
+\newblock {\em Feature Extraction}, <<missing>>:519--550, 2006.
+
+\bibitem{bengio2004learning}
+Y.~Bengio, O.~Delalleau, N.L. Roux, J.F. Paiement, P.~Vincent, and M.~Ouimet.
+\newblock Learning eigenfunctions links spectral embedding and kernel pca.
+\newblock {\em Neural Computation}, 16(10):2197--2219, 2004.
+
 \bibitem{bengio2004out}
 Y.~Bengio, J.F. Paiement, P.~Vincent, O.~Delalleau, N.~Le~Roux, and M.~Ouimet.
 \newblock Out-of-sample extensions for lle, isomap, mds, eigenmaps, and
@@ -80,6 +90,12 @@ S.W. Hadley, B.L. Mark, and A.~Vannelli.
 \newblock An efficient eigenvector approach for finding netlist partitions.
 \newblock {\em Computer-Aided Design of Integrated Circuits and Systems, IEEE
   Transactions on}, 11(7):885--892, 1992.
+
+\bibitem{ham2004kernel}
+J.~Ham, D.D. Lee, S.~Mika, and B.~Sch{\"o}lkopf.
+\newblock A kernel view of the dimensionality reduction of manifolds.
+\newblock In {\em Proceedings of the twenty-first international conference on
+  Machine learning}, page~47. ACM, 2004.
 
 \bibitem{hendrickson1993multidimensional}
 B.~Hendrickson and R.~Leland.

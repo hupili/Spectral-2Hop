@@ -462,6 +462,7 @@ be hard.
 % and conductance
 
 \subsection{Spectral Embeding}
+\label{sec:se}
 
 This stage takes a weighted graph adjacency matrix as input. 
 The matrix can be derive from several starting points as 
@@ -475,6 +476,7 @@ The $ N $ rows of $ Y $ provides a $ d $-dimensional Euclidean
 embedding. 
 
 \subsubsection{Diagonal Shifting}
+\label{sec:diags}
 
 Although off-diagonals of $A$ are defined to be affinity / similarity / 
 inner product, the definition of diagonal varies in different contexts. 
@@ -520,6 +522,7 @@ essentially the same.
 %machine learning view of $A$. 
 
 \subsubsection{Adjacency or Laplacian}
+\label{sec:adj_lap}
 
 We define the degree matrix $R$ to be a diagonal matrix with 
 $R_{ii} = \sum_j{A_{ij}}$. The Laplacian is defined as:
@@ -1742,6 +1745,70 @@ all those methods above.
 
 \subsection{Kernel Framework}
 \label{sec:kfx}
+
+Through the discussion of KPCA(\rsec{\ref{sec:kpca}}), 
+we find that the kernel function is as general as "graph" 
+discussed in \rsec{\ref{sec:gfx}}. Then it's possible  
+to create output-equivalent KPCA for other SET. 
+
+One thing to note is that in KPCA the kernel is Positive 
+SemiDefinite(PSD) while the adjacency matrix of graphs
+do not necessarily be PSD. So using KPCA framework to 
+perform other SET may be simply a notational generalization. 
+This observation has been made by several authors, for example
+\cite{bengio2004learning}\cite{bengio2006spectral}\cite{ham2004kernel}. 
+Allowing an arbitrary kernel function $ k(x_i,x_j) $, 
+we can specify many algorithms above in terms of kernel. 
+\rtbl{\ref{tbl:kernel}} shows some examples. 
+
+\begin{table}[htb]
+	\centering
+	\caption{Kernel Example for Several Methods}
+	\label{tbl:kernel}
+	\begin{tabular}{c|c}
+		\hline 
+		Method & Kernel $ k(x_i,x_j) $ \\
+		\hline 
+		MDS\cite{borg2005modern} 
+		& $ -\frac{1}{2}(I - \frac{1}{n} \vec{1} \tran{\vec{1}})
+		D^{(2)} (I - \frac{1}{n} \vec{1} \tran{\vec{1}}) $ \\
+		isomap\cite{tenenbaum2000isomap} 
+		& $ -\frac{1}{2}(I - \frac{1}{n} \vec{1} \tran{\vec{1}})
+		D_G^{(2)} (I - \frac{1}{n} \vec{1} \tran{\vec{1}}) $ \\
+		Ng's SC\cite{ng2002spectral} & $ \sym{A} $ \\
+		LEmap\cite{belkin2003laplacian} & $ \sigma I - \sym{L} $ (not $ \rw{L}$ !)\\ 
+		LLE\cite{roweis2000lle} & $ \sigma I - (I - \tran{W})(I - W) $ \\
+		\hline 
+	\end{tabular}
+\end{table} 
+
+There are some points worth to note:
+\begin{itemize}
+	\item $ \sigma I $ in \rtbl{\ref{tbl:kernel}} has a similar 
+	form with diagonal shifting discussed in \rsec{\ref{sec:diags}}. 
+	The reason here is slightly different and much simpler: the KPCA framework
+	solves for principal eigenvectors, so for those algorithms 
+	who are interested in smallest eigenvalues we negate the matrix 
+	to achieve the goal. 
+	\item The discussion of diagonal shifting in \rsec{\ref{sec:diags}}
+	reveals the fact that any symmetric matrix can be converted to a valid
+	kernel without influence the eigen vectors. So even if we stick 
+	to the notion that a kernel should be PSD, it's also possible to 
+	conclude those algorithms in terms of an output-equivalent KPCA. 
+	\item LEmap in \rtbl{\ref{tbl:kernel}} uses $ \sym{L} $ rather than 
+	$ \rw{L} $, which differs from our discussion. The reason is 
+	that $ \sym{L} $ is symmetric. With the relationship developed in 
+	\rsec{\ref{sec:adj_lap}}, we can obtain $ \rw{L} $'s embedding 
+	from the output of KPCA using $ \sym{L} $ as a kernel. 
+	\item As is shown in \cite{bengio2006spectral}, 
+	using kernels in \rtbl{\ref{tbl:kernel}} is not enough to 
+	minic those algorithms thoroughly. For example, after 
+	solving KPCA with the MDS kernel, we need to scale the eigen 
+	vectors by square root eigen values. In this case, KPCA framework 
+	is weaker than our framework(\rsec{\ref{sec:framework}}). 
+	In our framework, post-processing is formalized in the 
+	Spectral Embedding stage(\rsec{\ref{sec:se}}). 
+\end{itemize}
 
 
 \subsection{Trace Maximization}
