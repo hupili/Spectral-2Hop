@@ -175,6 +175,14 @@ U.~Von~Luxburg.
 	Wikipedia, Cosine Similarity, 
 	\url{http://en.wikipedia.org/wiki/Cosine_similarity}
 	
-\bibitem{wki_svd}
+\bibitem{wiki_svd}
 	Wikipedia, Singular Value Decomposition
-	\url{http://en.wikipedia.org/wiki/Singular_value_decomposition}\end{thebibliography}
+	\url{http://en.wikipedia.org/wiki/Singular_value_decomposition}
+	
+\bibitem{wiki_kcl_kvl}
+	Wikipedia, Kirchhoff's Circuit Laws, 
+	\url{http://en.wikipedia.org/wiki/Kirchhoff%27s_circuit_laws}
+	
+\bibitem{wiki_mpinv}
+	Wikipedia, Moore-Penrose Inverse, 
+	\url{http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse}\end{thebibliography}

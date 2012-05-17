@@ -15,6 +15,10 @@
 \newcommand{\cut}[1]{\text{cut}(#1)}
 \newcommand{\assoc}[1]{\text{assoc}(#1)}
 \newcommand{\vol}[1]{\text{vol}(#1)}
+%Moore-Penrose Inverse
+%I can not find that "plus" look symbol
+%Currently use "plus"..
+\newcommand{\mpinv}{+}
 
 
 \usepackage{subfigure}
@@ -639,7 +643,7 @@ differences on varied application scenarios.
 
 Eigen Value Decomposition (EVD) and Singular Value Decomposition (SVD)
 are two important subroutines in SET. They are algebraically related
-\cite{wki_svd}:
+\cite{wiki_svd}:
 \begin{eqnarray}
 	X &=& U \Sigma \tran{V} \\
 	X\tran{X} &=& U \Sigma \tran{V} V \Sigma \tran{U} \\
@@ -667,6 +671,7 @@ equivalent similarity matrix (metric formulation in our framework)
 can be omitted. 
 
 \subsubsection{Scaling and Projection}
+\label{sec:postproc}
 
 The scaling and projection described earlier are 
 both regarded as post-processing of eigen vectors. 
@@ -720,6 +725,7 @@ One may think to scale the eigen vectors by a polynomial or
 more generally a function of eigen values, i.e.
 \begin{equation}
 	U f(\Lambda)
+	\label{eq:post_scale_f}
 \end{equation}
 This operation risk losing good justifications. In our survey, 
 we have only seen three choice of $ f $:
@@ -728,6 +734,10 @@ we have only seen three choice of $ f $:
 	\item $ \Lambda^{\frac{1}{2}} $. This operation often roots 
 	from an error energy minimization / low-rank approximation
 	view point(\rsec{\ref{sec:lrapprox}}).
+	\item $ (\Lambda^{\mpinv})^{\frac{1}{2}} $
+	(the square root of Moore-Penrose Inverse\cite{wiki_mpinv}). 
+	This operation is corresponding to a commute time justification
+	(\rsec{\ref{sec:commute}}). 
 	\item Katz polynomial(\req{\ref{eq:katz}}). On one hand, 
 	it has good justification by considering all length's 
 	connectness. On the other hand, we have a closed form for 
@@ -1063,7 +1073,10 @@ it becomes more difficult to establish their relaxed version.
 In our survey so far, there are no sophisticated approach 
 to tackle with the two objectives. 
 
-\subsection{Random Walk}
+\subsection{Stochastic Justification}
+
+\subsubsection{Random Walk}
+\label{sec:randw}
 %[von]
  
 \cite{maila2001random}
@@ -1113,10 +1126,76 @@ The minimization of NCut can also be interpreted as minimizing the
 conditional probability 
 that a random walker starts from a certain cluster and esapces it. 
 
+\subsubsection{Commute Time}
+\label{sec:commute}
+%[jihun ham, kernel]. 
+%view pseudo inverse of graph Laplacian by commute times on graphs. 
+
+The relationship betwen pseudo inverse of graph Laplacian 
+and commute time was observed by many authors. For detailed
+discussion, readers can also refer to Luxburg's tutorial\cite{von2007tutorial}. 
+In this section, we organize a short discussion 
+from the electric network's perspective 
+and relate it to MDS(\rsec{\ref{sec:mds}}). 
+
+An electric network satisfies Ohm's Law and Kirchhoff's Law
+(KCL, KVL \cite{wiki_kcl_kvl}). Using standard electric network
+arguments, we have:
+\begin{equation}
+	L \phi = i_{\text{ext}}
+\end{equation}
+where $ L $ is the Laplacian of conductance matrix $ A $, $ \phi $
+is the voltage vector, and $ i_{\text{ext}} $ is external current 
+we input to each vertex. Note that $ \tran{\vec{1}} i_{\text{ext}} = 0$, 
+or the electric system has no solution. The effective resistance 
+between $ s,t $ is the voltage difference between the two vertices when 
+one unit of current is injected to $ s $ and extracted from $ t $. 
+Using characteristic vectors, we can express the following quantities:
+\begin{eqnarray}
+	L \phi &=& \chi_s - \chi_t \\
+	\text{Reff}(s,t) &=& \phi(s) - \phi(t) \nonumber \\
+	&=& \tran{(\chi_s - \chi_t)}\phi \nonumber \\
+	&=& \tran{(\chi_s - \chi_t)} L^{\mpinv} (\chi_s - \chi_t)
+\end{eqnarray}
+where $ L^{\mpinv} $ is Moore-Penrose Inverse\cite{wiki_mpinv} of $ L $. 
+It can be shown (\cite{lau-2012-spectral-ln}, W12) that:
+\begin{equation}
+	\text{Comm}(s,t) = 2M\text{Reff}(s,t) 
+	= 2M \tran{(\chi_s - \chi_t)} L^{\mpinv} (\chi_s - \chi_t)
+\end{equation}
+One important observation is that the commute time 
+encoded in $  L^{\mpinv} $ can be viewed as an Euclidean 
+distance. Thus it is intuitive to perform a distance preserving 
+embedding using  $  L^{\mpinv} $ as pairwise distance. 
+Suppose $ L^{\mpinv} = U \Lambda^{\mpinv} \tran{U}$, the embedding 
+is given by first several columns of $  U (\Lambda^{\mpinv})^{\frac{1}{2}} $. 
+
+Luxburg relate the commute time embedding with unnormalized Laplacian case
+(\cite{von2007tutorial} ch6). That justification is not very strong. Instead, 
+we loot at the embedding of $  U (\Lambda^{\mpinv})^{\frac{1}{2}} $
+from the following two angles:
+\begin{itemize}
+	\item In our discussion of enhancements
+	(\rsec{\ref{sec:enhance}}), we proposed to pass 
+	effective resistance matrix to the next SE stage. 
+	Operation wise, it's different from the embedding discussed
+	in this section. As to the outcome, they are the same. 
+	\item In \rsec{\ref{sec:postproc}}, we proposed the general scaling 
+	of eigen vectors in post-processing stage (\req{\ref{eq:post_scale_f}}). 
+	Plugging in the 
+	specialized version $ f(\Lambda) = (\Lambda^{\mpinv})^{\frac{1}{2}} $, 
+	we see that the commute time embedding also fits into our 
+	framework (\rsec{\ref{sec:framework}}). The discussion in this section 
+	provides a justification of the choice of $ f $. 
+	The reason for square root of eigen value is the same as that of 
+	MDS (\rsec{\ref{sec:mds}}). 
+\end{itemize}
+
 \subsection{Matrix Perturbation}
 \label{sec:mper}
 %[andrew ng]
 %[von] for further discussion
+
 
 
 \subsection{Low Rank Approximation}
@@ -1126,9 +1205,6 @@ that a random walker starts from a certain cluster and esapces it.
 \subsection{Density Estimation View}
 [mo chen, 2010]
 
-\subsection{Commute Time}
-[jihun ham, kernel]. 
-view pseudo inverse of graph Laplacian by commute times on graphs. 
 
 \subsection{Polarization}
 [m. brand] unifying view... 
