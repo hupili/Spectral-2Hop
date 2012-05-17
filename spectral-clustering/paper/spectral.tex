@@ -1709,15 +1709,40 @@ for more details.
 \end{algorithm}
 
 
-
 \section{Unifying Views}
 \label{sec:unify}
+
+In this section, we provide unifying views of SC / SE / DR
+from several angles. Due to their close relationship, 
+we already term all by SET in this artile. 
+
+\subsection{Graph Framework}
+\label{sec:gfx}
+
+Graph framework is obvious and discussed throughout this article. 
+In \rsec{\ref{sec:framework}}, we provided a detailed discussion 
+of SE. We briefly review the three stages:
+\begin{enumerate}
+	\item Metric Formulation. This stage converts raw input 
+	to a (weighted) graph adjacency matrix. 
+	\item Spectral Embedding. A certain transformed version of 
+	adjacency matrix is eigen decomposed. Embedding coordinates
+	are obtained from (possibly eigen value scaled) eigen vectors. 
+	\item Clustering. Hard cut algorithms are invoked to 
+	partition points in the embedded space into clusters.  
+\end{enumerate}
+
+For those algorithms presented in \rsec{\ref{sec:nldr}}, 
+they all have the EVD procedure, which can be regarded as 
+the Spectral Embedding stage in our graph framework. 
+Processes before EVD (no matter how complex or simple they are) 
+are regarded as forming the (weighted) adjacency matrix. 
+The weighting method is not specified and can thus cover
+all those methods above. 
 
 \subsection{Kernel Framework}
 \label{sec:kfx}
 
-\subsection{Graph Framework}
-\label{sec:gfx}
 
 \subsection{Trace Maximization}
 \label{sec:trmax}
