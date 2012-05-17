@@ -310,6 +310,7 @@ seek for justifications using tools from spectral graph theory or machine learni
 
 
 \subsection{Metric Formulation}
+\label{sec:metric}
 
 We rate great importance of metric formulation step, 
 although it is not the main body of SET. 
@@ -1365,6 +1366,48 @@ this section, we assemble them to give the algorithm(\ralg{\ref{alg:mds}}).
 
 \subsection{isomap}
 \label{sec:isomap}
+
+Bearing in mind that MDS performs distance preserving 
+embedding, the description of isomap \cite{tenenbaum2000isomap}
+is rather simple: isomap preserves geodesic distance. 
+Suppose we have a manifold in high dimensional space. 
+The geodesic distance between two nodes 
+is the shortest path distance between the nodes 
+along the manifold. 
+See \ralg{\ref{alg:isomap}} for the algorithm. 
+
+\begin{algorithm}[htb]
+	\caption{isomap}
+	\label{alg:isomap}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE Construct connectness graph $ G = <V, E> $. 
+		\COMMENT{kNN, $ \epsilon $-ball, etc. \rsec{\ref{sec:metric_hdd}} }
+		\STATE $ D_{ij} = \left\lbrace \begin{array}{cc}
+			||x_i - x_j|| & (i,j) \in E \\
+			\infty & (i,j) \notin E
+		\end{array} \right. $
+		\STATE $ D_G = \text{Floyd}({D}) $
+		\STATE $ Y = \text{MDS}(D_G, \hat{d}) $
+	\end{algorithmic}
+\end{algorithm}
+
+In \ralg{\ref{alg:isomap}}, "Floyd" denotes the Floyd-Warshall algorithm \cite{wiki_floyd}
+for shortest path. Tenenbaum also suggests other algorithms 
+for all-pair shortest path which can utilize the sparse 
+structure of graph $ G $\cite{tenenbaum2000isomap}. 
+
+The justification for the notion of geodesic distance preserving 
+comes from two assumptions:\cite{donoho2003hessian}
+\begin{itemize}
+	\item Global isometry. That means the geodesic distance 
+	in observation space $ X $ is equal to the Euclidean distance 
+	in parametric space $ Y $. 
+	\item Convexity. The set of possible configurations 
+	in parametric space is convex.  
+\end{itemize}
 
 
 \subsection{Laplacian Eigenmap}
