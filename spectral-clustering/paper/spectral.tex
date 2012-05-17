@@ -1191,28 +1191,6 @@ from the following two angles:
 	MDS (\rsec{\ref{sec:mds}}). 
 \end{itemize}
 
-\subsection{Matrix Perturbation}
-\label{sec:mper}
-%[andrew ng]
-%[von] for further discussion
-
-I'm not familiar with matrix perturbation theory. This section 
-here is to make completeness of our discussion. Interested 
-readers can refer to Luxburg's tutorial 
-\cite{von2007tutorial}. In Ng's work \cite{ng2002spectral}, 
-there is a more tentative discussion. Careful perturbation 
-bound is derived from 4 assumptions of graph properties. 
-
-The main idea is that given a small perturb matrix $ T $, 
-the eigen vector of $ A $ and $ (A+T) $ does not differ too much. 
-When the graph exhbits ideal clustering, eigen vectors of 
-both (normalized) adjacency\cite{ng2002spectral}
-matrix and (normalized) Laplacian\cite{von2007tutorial} matrix appear
-to be characteristic vectors (subject to orthogonal transformation).
-When the graph is not very far from the ideal case, using 
-the matrix perturbation argument, those vectors are not very far from 
-characteristic vectors. Thus standard Euclidean clustering algorithm 
-like K-means should be able to detect the clustering correctly. 
 
 \subsection{Low Rank Approximation}
 \label{sec:lrapprox}
@@ -1296,6 +1274,29 @@ It can be derived that, with proper weight assignments, the NCut
 algorithm can output the partition with which the Bayes error 
 is minimized. We refer interested readers to their work and 
 omit detailed discussion here. 
+
+\subsection{Matrix Perturbation}
+\label{sec:mper}
+%[andrew ng]
+%[von] for further discussion
+
+I'm not familiar with matrix perturbation theory. This section 
+here is to make completeness of our discussion. Interested 
+readers can refer to Luxburg's tutorial 
+\cite{von2007tutorial}. In Ng's work \cite{ng2002spectral}, 
+there is a more tentative discussion. Careful perturbation 
+bound is derived from 4 assumptions of graph properties. 
+
+The main idea is that given a small perturb matrix $ T $, 
+the eigen vector of $ A $ and $ (A+T) $ does not differ too much. 
+When the graph exhbits ideal clustering, eigen vectors of 
+both (normalized) adjacency\cite{ng2002spectral}
+matrix and (normalized) Laplacian\cite{von2007tutorial} matrix appear
+to be characteristic vectors (subject to orthogonal transformation).
+When the graph is not very far from the ideal case, using 
+the matrix perturbation argument, those vectors are not very far from 
+characteristic vectors. Thus standard Euclidean clustering algorithm 
+like K-means should be able to detect the clustering correctly. 
 
 \subsection{Polarization}
 %[m. brand] unifying view... 
