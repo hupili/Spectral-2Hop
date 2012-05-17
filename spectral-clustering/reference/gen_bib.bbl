@@ -24,6 +24,13 @@ M.~Belkin and P.~Niyogi.
   representation.
 \newblock {\em Neural computation}, 15(6):1373--1396, 2003.
 
+\bibitem{bengio2004out}
+Y.~Bengio, J.F. Paiement, P.~Vincent, O.~Delalleau, N.~Le~Roux, and M.~Ouimet.
+\newblock Out-of-sample extensions for lle, isomap, mds, eigenmaps, and
+  spectral clustering.
+\newblock {\em Advances in neural information processing systems}, 16:177--184,
+  2004.
+
 \bibitem{bishop2006pattern}
 C.M Bishop.
 \newblock {\em Pattern recognition and machine learning}, volume~4.

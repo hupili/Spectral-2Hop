@@ -1591,11 +1591,53 @@ There are two points to note:
 	explicit kernel function because $ (\tran{X}X)_{ij} = k(x_i,x_j) $. 
 \end{itemize}
 
-\subsection{LLE}
-\label{sec:lle}
-
 \subsection{Kernel PCA}
 \label{sec:kpca}
+
+In \cite{scholkopf1998kpca}, Sch{\"o}lkopf proposed 
+Kernel PCA(KPCA) and we will see in \rsec{\ref{sec:kfx}}
+the kernel framework is so general that it can 
+cover almost all the SET. 
+
+Let $X_{n \times N} = [x_1, x_2, \ldots, x_N]$ be data points; 
+$\Phi_{d \times N} = [\phi(x_1), \phi(x_2), \ldots, \phi(x_N)]$ be
+their image in the feature space. Performing covariance 
+version algorithm(\ralg{\ref{alg:pca_cov}}) in feature space 
+may be intractable due to probably very large $ d $. Thus 
+we want to avoid the explicit construction of covariance 
+matrix ($ \Phi\tran{\Phi} $). 
+The kernel(Gram matrix) is defind as:
+\begin{equation}
+	K = \tran{\Phi}\Phi 
+\end{equation}
+Using the argument in \rsec{\ref{sec:pca}}, we can 
+invoke the inner product version PCA on $ K $(\ralg{\ref{alg:pca_in}}). 
+When the kernel is specified as kernel function, 
+this leads to the KPCA algorithm, where inner product
+is not performed explicitly. We show the KPCA algorithm in 
+\ralg{\ref{alg:kpac}}. 
+ 
+\begin{algorithm}[htb]
+	\caption{Kernel PCA}
+	\label{alg:kpac}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Kernel function: $ k(x_i,x_j) $\\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE Construct Gram matrix: $ (G)_{ij} = k(x_i,x_j)$
+		\STATE EVD of covariance matrix: $ G = U \Lambda \tran{U} $
+		\STATE $ Y = U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
+
+In this article, we concern more about in-sample embedding, so 
+our way to present KPCA looks quite simple if readers have 
+seen related articles before. For out-of-sample embedding, 
+readers can refer to \cite{scholkopf1998kpca} and \cite{bengio2004out}. 
+
+\subsection{LLE}
+\label{sec:lle}
 
 \section{Unifying Views}
 \label{sec:unify}
