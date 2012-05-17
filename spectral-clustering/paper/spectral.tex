@@ -1216,13 +1216,84 @@ like K-means should be able to detect the clustering correctly.
 
 \subsection{Low Rank Approximation}
 \label{sec:lrapprox}
-[matthew brand]
+%[matthew brand]
 
+In the work \cite{brand2003unifying}, Brand associates 
+a kernel view with adjacency matrix (affinity matrix). 
+Note that in our framework (\rsec{\ref{sec:framework}}), 
+after metric formulation, we look on all resulting matrix 
+as adjacency matrix regardless of their origin. Note that 
+the justification in this section only works for those adjacency matrices 
+that can be interpreted as kernels (at least "close" to PSD).  
 
+Let $X = [x_1, x_2, \ldots, x_N]$ be data points and 
+$\Phi = [\phi(x_1), \phi(x_2), \ldots, \phi(x_N)]$ be 
+their image in feature space. The mapping $ \phi(.) $ 
+can be anything, e.g. $ \phi(x) = x $ as identity. If the graph 
+adjacency matrix is a kernel, it should have this structure:
+\begin{equation}
+	A = \tran{\Phi} \Phi
+\end{equation}
+Thus an EVD can recover the coordinates of data points in feature 
+space, i.e. $ \phi(x_i) $. 
+
+Now we have two problems:
+\begin{itemize}
+	\item Suppose the feature space is $ d $-dimensional. The rank of 
+	$ A $ is then $ \min\{d,N\} $, namely we have at most $ \min\{d,N\} $
+	non-zero eigen values. If $ d > N $, we can not recover all the coordinates. 
+	\item Even if we can recover all coordinates, it may not always be 
+	what we want. For example, many high-dimensional data is poisoned. 
+	A large portion of those dimensions may be pure noise. Recovering them 
+	brings no benifit for later clustering stage. 
+\end{itemize}
+
+The two problems motivate us to seek for approximate recovery 
+rather than exact recovery, which leads to the following optimization:
+\begin{eqnarray}
+	\minimize_{Y \in \mathbb{R}^{N \times \hat{d}}} 
+	&& ||A - Y \tran{Y}||_F^2
+\end{eqnarray}
+where $ ||.||_F $ denotes the Frobenius norm\cite{wiki_mnorm}, 
+and $ \hat{d} $ is the dimensionality we want to approximate or 
+inferred from prior knowledge. This is the standard low rank 
+approximation. If our adjacency matrix can be decomposed as 
+$ A = U \Lambda \tran{U} $, the solution is given by:
+\begin{equation}
+	Y = U_{\hat{d}} (\Lambda_{\hat{d}})^{\frac{1}{2}}
+\end{equation}
+where $ U_{\hat{d}}$ and $\Lambda_{\hat{d}} $ denote first 
+$ \hat{d} $ columns of corresponding matrix. 
+
+In our framework, the algorithm is described as:
+use adjacency matrix; scale eigen vectors by square root eigen value. 
+With the assumption that $ A $ is a kernel matrix, this algorithm 
+should give a reasonable embedding. 
+
+Note that this algorithm simply do SE, and can be justified to 
+yield good layout of points in lower-dimensional Euclidean space. 
+However, it does not directly show any clue that there will 
+be easy-to-separate clusters after this embedding. Our explanation 
+is that, although SE is a subprocedure of SC, the objective of SE 
+is stronger at most time. If the layout given by a certain SE 
+is reasonable but the embedded version is still hard to cluster, we should 
+argue that very probably there are no good natural clustering. 
 
 \subsection{Density Estimation View}
-[mo chen, 2010]
+%[mo chen, 2010]
+In the survey, we found one interesting interpretation of SC given 
+by Chen(\cite{chen2010isoperimetric}, ch2.4). They first view 
+clustering, embedding, and dimensionality reduction all as 
+density estimation problem. For example, clustering algorithms 
+aim at finding $ K $ centers to represent data points. Those 
+centroids can be regarded as very dense blobs if we adopt the 
+density estimation view. 
 
+They choose Gaussian kernel as Kernel Density Estimator (KDE). 
+It can be derived that, with proper weight assignments, the NCut 
+algorithm can output the partition with which the Bayes error 
+is minimized. We refer interested readers to their work and 
+omit detailed discussion here. 
 
 \subsection{Polarization}
 [m. brand] unifying view... 

@@ -40,6 +40,12 @@ M.~Brand and K.~Huang.
 \newblock In {\em Proceedings of the Ninth International Workshop on Artificial
   Intelligence and Statistics}, 2003.
 
+\bibitem{chen2010isoperimetric}
+M.~Chen, M.~Liu, J.~Liu, and X.~Tang.
+\newblock Isoperimetric cut on a directed graph.
+\newblock In {\em Computer Vision and Pattern Recognition (CVPR), 2010 IEEE
+  Conference on}, pages 2109--2116. IEEE, 2010.
+
 \bibitem{chung2007random}
 F.~Chung.
 \newblock Random walks and local cuts in graphs.
@@ -185,4 +191,8 @@ U.~Von~Luxburg.
 	
 \bibitem{wiki_mpinv}
 	Wikipedia, Moore-Penrose Inverse, 
-	\url{http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse}\end{thebibliography}
+	\url{http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse}
+	
+\bibitem{wiki_mnorm}
+	Wikipedia, Matrix Norm, 
+	\url{http://en.wikipedia.org/wiki/Matrix_norm}\end{thebibliography}
