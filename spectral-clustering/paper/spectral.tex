@@ -1487,10 +1487,109 @@ advantages in embedding. The two assumptions of isomap
 	in observation space is also a problem. 
 \end{itemize} 
 
-
-
 \subsection{PCA}
 \label{sec:pca}
+
+Principal Component Analysis(PCA)\cite{bishop2006pattern} has a very long history in 
+DR. There are many interpretations of PCA, including 
+subspace learning, maximum variance preserving, 
+minimum projection error and probabilistic formulation
+\cite{tipping1999probabilistic}. In this section, we present 
+the minimum projection error view of PCA and show one useful equivalent
+form. 
+
+Suppose we have a set of zero-mean
+data points $X = [x_1, x_2, \ldots, x_N]$. We want to project 
+them into a $ \hat{d} $-dimensional subspace spanned by
+an orthonormal set 
+$ \{u_1, u_2, \ldots, u_{\hat{d}}\} $. We want to find 
+$ U = (u_1, u_2, \ldots, u_{\hat{d}}) $ that results 
+in minimum distortion:
+\begin{eqnarray}
+	\minimize_{U \in \mathbb{R}^{n \times \hat{d}}} 
+	&& { J(U) = \sum_{i=1}^{N}{||U\tran{U}x_i - x_i||^2} } \nonumber \\
+	s.t. && \tran{U}U = I
+\end{eqnarray}
+The objective can be transformed in the following way:
+\begin{eqnarray}
+	J(U) &=& \sum_{i=1}^{N} \tr{ \tran{ (U\tran{U}x_i - x_i) }(U\tran{U}x_i - x_i) }  \\
+	&=& \sum_{i=1}^{N} \tr{ \tran{x_i} \tran{(U\tran{U}-I)}(U\tran{U}-I)  x_i } \\
+	&=&  \sum_{i=1}^{N} \tr{  x_i \tran{x_i} \tran{(U\tran{U}-I)}(U\tran{U}-I)  } \\
+	&=&   \tr{  \sum_{i=1}^{N}(x_i \tran{x_i}) \tran{(U\tran{U}-I)}(U\tran{U}-I)  } \\
+	&=&   \tr{  X\tran{X} \tran{(U\tran{U}-I)}(U\tran{U}-I)  } \\
+	&=&   \tr{  X\tran{X} (U\tran{U}U\tran{U} - 2 U\tran{U} + I)  } \\
+	&=& -\tr{  \tran{U}X\tran{X} U} + \tr{X\tran{X}}
+\end{eqnarray}
+The second term is constant to $ U $, so the optimization problem 
+can be transformed to:
+\begin{eqnarray}
+	\maximize_{U \in \mathbb{R}^{n \times \hat{d}}} 
+	&& { \tr{  \tran{U}(X\tran{X}) U} } \nonumber \\
+	s.t. && \tran{U}U = I
+\end{eqnarray}
+We have seen this form for many times in \rsec{\ref{sec:combinatoric}}. 
+The solution is given by the first 
+(descending order of eigen values) $ \hat{d} $ eigen vectors of 
+$ X\tran{X} $. 
+
+Note that $ U $ is only the subspace basis. We compute the embedding
+(coordinates in $ U $'s system) like:
+\begin{equation}
+	Y = \tran{(\tran{U}X)} = \tran{X} U
+\end{equation}
+where we stick to the convention that embedding coordinates are given 
+by rows of $ Y $. From the analysis of PCA, we reach the EVD of
+%$ X\tran{X} = \bar{U} \Lambda \tran{\bar{U}} $ and obtain the embedding 
+$ (X\tran{X})U = U \Lambda $ and obtain the embedding 
+by one more projection. On the contrary, in most SE algorithms, 
+we decompose $ \tran{X}X $. The relationship between the two matrices 
+are shown below:
+\begin{eqnarray}
+	\tran{X}X Y &=& \tran{X}X \tran{X} U \nonumber \\
+	&=& \tran{X} U \Lambda \nonumber \\
+	&=& Y \Lambda
+\end{eqnarray}
+That is to say, columns of $ Y $ are eigen vectors of  $ \tran{X}X $
+with corresponding eigen values $ \Lambda $. We conclude 
+the two operationally different versions of PCA in 
+\ralg{\ref{alg:pca_cov}} and \ralg{\ref{alg:pca_in}}. 
+
+\begin{algorithm}[htb]
+	\caption{Principal Component Analysis (Covariance Version)}
+	\label{alg:pca_cov}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE EVD of covariance matrix: $ X\tran{X} = U \Lambda \tran{U} $
+		\STATE $ Y = \tran{X} U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htb]
+	\caption{Principal Component Analysis (Inner Product Version)}
+	\label{alg:pca_in}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE EVD of covariance matrix: $ \tran{X}X = U \Lambda \tran{U} $
+		\STATE $ Y = U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
+
+There are two points to note:
+\begin{itemize}
+	\item $ \tran{X}X $ and $ X\tran{X} $ are of sizes $ N \times N $ and 
+	$ n \times n $, respectively. Since the EVD is a computationally 
+	intensive stage, we can choose the version which results in smaller 
+	matrices. 
+	\item The same observation can lead to kernel PCA. For probably 
+	infinite dimensional feature space, computing $ X\tran{X} $ 
+	is impossible but $ \tran{X}X $ is tractable. $ \tran{X}X $
+	can be formed through inner product, or by specifying an 
+	explicit kernel function because $ (\tran{X}X)_{ij} = k(x_i,x_j) $. 
+\end{itemize}
 
 \subsection{LLE}
 \label{sec:lle}

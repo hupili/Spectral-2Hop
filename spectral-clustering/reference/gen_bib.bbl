@@ -175,6 +175,12 @@ J.B. Tenenbaum, V.~De~Silva, and J.C. Langford.
 \newblock A global geometric framework for nonlinear dimensionality reduction.
 \newblock {\em Science}, 290(5500):2319--2323, 2000.
 
+\bibitem{tipping1999probabilistic}
+M.E. Tipping and C.M. Bishop.
+\newblock Probabilistic principal component analysis.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 61(3):611--622, 1999.
+
 \bibitem{von2007tutorial}
 U.~Von~Luxburg.
 \newblock A tutorial on spectral clustering.
