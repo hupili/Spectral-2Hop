@@ -108,6 +108,12 @@ L.~Lov{\'a}sz and M.~Simonovits.
 \newblock In {\em Foundations of Computer Science, 1990. Proceedings., 31st
   Annual Symposium on}, pages 346--354. IEEE, 1990.
 
+\bibitem{maila2001random}
+M.~Maila and J.~Shi.
+\newblock A random walks view of spectral segmentation.
+\newblock {\em AI and STATISTICS (AISTATS) 2001}, <<misssing>>:<<misssing>>,
+  2001.
+
 \bibitem{ng2002spectral}
 A.Y. Ng, M.I. Jordan, and Y.~Weiss.
 \newblock On spectral clustering: Analysis and an algorithm.

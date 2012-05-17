@@ -1064,12 +1064,60 @@ In our survey so far, there are no sophisticated approach
 to tackle with the two objectives. 
 
 \subsection{Random Walk}
-[von]
+%[von]
+ 
+\cite{maila2001random}
+\cite{von2007tutorial}
+discussed the relationship between NCut and 
+random walk on graphs. In this section, 
+we generalize their discussion of two-cluster scenario 
+to multi-cluster scenario. 
 
+In undirected graph, the stationary distribution is given by:
+\begin{equation}
+	P\{v\} = \frac{d(v)}{\vol{V}}
+\end{equation}
+The transition probability between vertices are given by the 
+left normalized adjacency matrix, i.e.:
+\begin{equation}
+	P\{u|v\} = (\rw{A})_{vu} = \frac{(A)_{vu}}{d(v)} 
+\end{equation}
+Given two clusters $ C_i, C_j \in V $, the probability a random walker 
+starting from $ C_i $ and go to $ C_j $ is denoted by:
+\begin{equation}
+	P\{C_j|C_i\} 
+\end{equation}
+Then the joint probability that a random walker 
+start from $ C_i $ and escape $ C_i $ is given by:
+\begin{eqnarray}
+	P\{V-C_i,C_i\} &=& \sum_{v \in C_i, u \notin C_i}{P\{u|v\}P\{v\}} \nonumber \\
+	&=& \sum_{v \in C_i, u \notin C_i} \frac{(A)_{vu}}{d(v)}  \frac{d(v)}{\vol{V}} \nonumber \\
+	&=& \frac{1}{\vol{V}} \sum_{v \in C_i, u \notin C_i} (A)_{vu} \nonumber \\
+	&=& \frac{1}{\vol{V}} \cut{C_i, V - C_i}
+\end{eqnarray}
+The probability that a random walker escape 
+$ C_i $ conditioned on the event it starts from $ C_i $ is:
+\begin{eqnarray}
+	P\{V-C_i|C_i\} &=& \frac{P\{V-C_i,C_i\}}{P\{C_i\}} \nonumber \\
+	&=&  \frac{\frac{1}{\vol{V}}\cut{C_i, V - C_i}}{\frac{\vol{C_i}}{\vol{V}}} \nonumber \\
+	&=& \frac{\cut{C_i, V - C_i}}{\vol{C_i}}
+\end{eqnarray}
+Summing over all clusters:
+\begin{equation}
+	\sum_{i=1}^{k}{ P\{V-C_i|C_i\} }  
+	= \sum_{i=1}^{k} \frac{\cut{C_i, V - C_i}}{\vol{C_i}}
+	= \text{NCut}
+\end{equation}
+
+The minimization of NCut can also be interpreted as minimizing the 
+conditional probability 
+that a random walker starts from a certain cluster and esapces it. 
 
 \subsection{Matrix Perturbation}
 \label{sec:mper}
-[andrew ng]
+%[andrew ng]
+%[von] for further discussion
+
 
 \subsection{Low Rank Approximation}
 \label{sec:lrapprox}
