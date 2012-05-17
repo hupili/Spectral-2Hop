@@ -1639,6 +1639,77 @@ readers can refer to \cite{scholkopf1998kpca} and \cite{bengio2004out}.
 \subsection{LLE}
 \label{sec:lle}
 
+Locally Linear Embedding\cite{roweis2000lle} is a neighbourhood
+preserving embedding. It first computes the neighbourhood
+(originally kNN, but other techniques like $ \epsilon $-ball 
+should also be available) of each vertex. Then, reconstruction weights
+from the neighbourhoods are computed. Last, lower-dimensional embedding
+tries to preserve the reconstruction weights. 
+
+The first step is easy, and we have discussed a lot about 
+the construction of adjacency graph in \rsec{\ref{sec:metric}}. 
+Denote the neighbourhood of vertex $ i $ by $ N(i) $, the 
+reconstruction weights of $ i $, $ W_{(i,:)} $, can be 
+obtained through the following quadratic programming:
+\begin{eqnarray}
+	\minimize_{ W_{i,j}, j \in N(i) } && {||x_i - \sum_{j \in N(i)}{W_{ij}x_j}||^2} \\
+%	s.t. && \tran{\vec{1}} W_{(i,:)} = 1 
+	s.t. && \sum_{j \in N(i)} W_{ij} = 1 
+\end{eqnarray}
+and $ W_{ij} = 0 $ if $ j \notin N(i) $. 
+The objective can again be transformed into a trace minimization form
+and the constraint can be tackled by standard Lagrangian multiplier.
+It yields the following closed form solution:
+\begin{equation}
+	W_{N(i)} = \frac{\tran{\vec{1}} G_i^{-1}}{\tran{\vec{1}} G_i^{-1} \vec{1}}
+\end{equation}
+where $ W_{N(i)} $ is a row vector denoting
+the $ j \in N(i) $ elements of $ W_{ij} $ and 
+$ G_i $ is called a local Gram matrix defined as:
+\begin{eqnarray}
+	N(i) &=& \{ j_1,j_2, \ldots j_{|N(i)|}\} \\
+	X_{N(i)} &=& [(x_i - x_{j_1}), (x_i - x_{j_2}), \ldots, (x_i - x_{j_{|N(i)|}}) ] \\
+	G_i &=& \tran{ X_{N(i)} } X_{N(i)}
+\end{eqnarray}
+For the last step, the embedding $ Y_{N \times \hat{d}} $ can be obtained 
+through an EVD problem:
+\begin{eqnarray}
+	J(Y) &=& \sum_{i}||\tran{Y_{(i,:)}} - W_{(i,:)}\tran{Y_{(i,:)}}||^2 \\
+	&=& \tr{ \tran{Y} (I - \tran{W})(I - W) Y }
+\end{eqnarray}
+This is again our familiar form. To absorb scaling and rotational invariance, 
+the embedding is further constrained to have uint covariance, i.e.
+$ \tran{Y} Y = I $. The final result is obtained through EVD of 
+$ (I - \tran{W})(I - W) $. 
+
+We present the operation in \ralg{\ref{alg:lle}}. 
+Interested readers can consult \cite{saul2003think} 
+for more details. 
+
+\begin{algorithm}[htb]
+	\caption{Locally Linear Embedding}
+	\label{alg:lle}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE Construct adjacency graph $ G = <V, E> $.		
+		\COMMENT{kNN, $ \epsilon $-ball, etc. \rsec{\ref{sec:metric_hdd}} }
+		\FORALL {$ i=1, 2, \ldots N $}
+			\STATE $ N(i) = \{j | (i,j) \in E\} = \{ j_1,j_2, \ldots j_{|N(i)|}\} $
+			\STATE $ X_{N(i)} =
+			[(x_i - x_{j_1}), (x_i - x_{j_2}), \ldots, (x_i - x_{j_{|N(i)|}}) ] $
+			\STATE $ G_i = \tran{ X_{N(i)} } X_{N(i)} $
+			\STATE $ W_{N(i)} = \frac{\tran{\vec{1}} G_i^{-1}}{\tran{\vec{1}} G_i^{-1} \vec{1}} $
+			\STATE $ W_{ij} = 0, \forall j \notin N(i) $
+		\ENDFOR
+		\STATE EVD: $ (I - \tran{W})(I - W) = U \Lambda \tran{U} $
+		\STATE $ Y = U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
+
+
+
 \section{Unifying Views}
 \label{sec:unify}
 
