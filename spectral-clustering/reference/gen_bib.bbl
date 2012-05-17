@@ -51,6 +51,11 @@ F.~Chung.
 \newblock Random walks and local cuts in graphs.
 \newblock {\em Linear Algebra and its applications}, 423(1):22--32, 2007.
 
+\bibitem{cox2008mds}
+M.A.A. Cox and T.F. Cox.
+\newblock Multidimensional scaling.
+\newblock {\em Handbook of data visualization}, <<missing>>:315--347, 2008.
+
 \bibitem{dhillon2004unified}
 I.~Dhillon, Y.~Guan, and B.~Kulis.
 \newblock A unified view of kernel k-means, spectral clustering and graph cuts.
@@ -195,4 +200,8 @@ U.~Von~Luxburg.
 	
 \bibitem{wiki_mnorm}
 	Wikipedia, Matrix Norm, 
-	\url{http://en.wikipedia.org/wiki/Matrix_norm}\end{thebibliography}
+	\url{http://en.wikipedia.org/wiki/Matrix_norm}
+	
+\bibitem{wiki_mds}
+	Wikipedia, Multi-Dimensional Scaling
+	\url{http://en.wikipedia.org/wiki/Multidimensional_scaling}\end{thebibliography}
