@@ -787,6 +787,12 @@ SE procedure.
 		\STATE $C_j = \{i| l_i = j\}$
 	\end{algorithmic}
 \end{algorithm}
+%notes on the centroid calculation. 
+%the formal procedure should be:
+% 1. convert x_i from cartesian to polar
+% 2. average the angle 
+%It can be shown my approach above is equivalent through 
+%tan[(theta1 + theta2)/2] = (sin(theta1) + sin(theta2))/(cos(theta1)+cos(theta2))
 
 In Ng's \cite{ng2002spectral} and Brand's \cite{brand2003unifying} work, 
 their low dimensional points are projected onto a unit sphere. It is more 
