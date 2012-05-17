@@ -805,6 +805,7 @@ We will see that not all of the combinations provided in
 \rsec{\ref{sec:framework}} have corresponding justifications. 
 
 \subsection{Combinatoric Justification}
+\label{sec:combinatoric}
 
 The traditional and most widely study is combinatoric justification. 
 The idea is centered on the concept of "cut". This section is 
@@ -1383,7 +1384,7 @@ See \ralg{\ref{alg:isomap}} for the algorithm.
 		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
 			Dimensionality of embedding space $ \hat{d} $
 		\ENSURE Embedding $ Y_{N \times \hat{d}} $
-		\STATE Construct connectness graph $ G = <V, E> $. 
+		\STATE Construct adjacency graph $ G = <V, E> $. 
 		\COMMENT{kNN, $ \epsilon $-ball, etc. \rsec{\ref{sec:metric_hdd}} }
 		\STATE $ D_{ij} = \left\lbrace \begin{array}{cc}
 			||x_i - x_j|| & (i,j) \in E \\
@@ -1412,6 +1413,61 @@ comes from two assumptions:\cite{donoho2003hessian}
 
 \subsection{Laplacian Eigenmap}
 \label{sec:lemap}
+
+By first glance, one may find that 
+Laplacian eigenmap(LEmap)\cite{belkin2003laplacian}
+is the same as the widely recognized
+spectral clustering (very close to the three
+algorithms in \cite{von2007tutorial}). 
+However, this algorithm is derived from a 
+different objective. 
+
+The SE stage in SC is to make
+the points more separable in a lower-dimensional 
+Euclidean distance. As to general purpose embedding algorithms, 
+or DR methods, the objective is to find a configuration that 
+best describe the data. This informal objective can be 
+realized in many ways. The one LEmap adopted is the weighted 
+distortion:
+\begin{equation}
+	\text{Distortion} = \sum_{(i,j) \in E} ||Y_{(i,:)} - Y_{(j,:)}||^2 A_{ij}
+\end{equation}
+where $ Y_{(i,:)} $ denotes the $ i $-th row of embedding matrix. 
+The intuition is, when two vertices are connected, we want 
+their embedding in lower dimensional space lie close. 
+The higher their similarity($ A_{ij} $) is, the more penalty 
+we get if we put them far apart. This objective is equivalent to 
+\begin{eqnarray}
+	\text{Distortion} &=& \sum_{(i,j) \in E} 
+	\sum_{l=1}^{\hat{d}}(Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
+	&=& \sum_{l=1} \sum_{(i,j) \in E} (Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
+	&=& \sum_{l=1} \tran{Y_{(:,l)}} L Y_{(:,l)} \\
+	&=& \tr{ \tran{Y} L Y }
+\end{eqnarray}
+To this end, the objective becomes the same as \req{\ref{eq:cut_relax}}. 
+We know that this objective is poorly defined. Since the whole 
+\rsec{\ref{sec:combinatoric}} is devoted to discussing the normalization 
+constraints, we use the results directly. 
+\rsec{\ref{sec:combinatoric}} showed we can 
+impose a general weight matrix $ W $ as normalization 
+constraints. In Belkin's work\cite{belkin2003laplacian}, 
+$ W=R $(degree matrix) is selected. We conclude the algorithm 
+in \ralg{\ref{alg:lemap}}. 
+
+\begin{algorithm}[htb]
+	\caption{Laplacian Eigenmap}
+	\label{alg:lemap}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE Construct (weighted) similarity graph $ G = <V, E> $. 
+		\COMMENT{\rsec{\ref{sec:metric_hdd}} }
+		\STATE Obtain left normalized graph Laplacian $ \rw{L} $. 
+		\STATE EVD: $ \rw{L}U = U \Lambda $
+		\STATE $ Y = U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
 
 \subsection{Hessian Eigenmap}
 \label{sec:hemap}
