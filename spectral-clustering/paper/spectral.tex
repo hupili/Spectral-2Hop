@@ -1253,6 +1253,7 @@ rather than exact recovery, which leads to the following optimization:
 \begin{eqnarray}
 	\minimize_{Y \in \mathbb{R}^{N \times \hat{d}}} 
 	&& ||A - Y \tran{Y}||_F^2
+	\label{eq:lrapprox_opt}
 \end{eqnarray}
 where $ ||.||_F $ denotes the Frobenius norm\cite{wiki_mnorm}, 
 and $ \hat{d} $ is the dimensionality we want to approximate or 
@@ -1261,6 +1262,7 @@ approximation. If our adjacency matrix can be decomposed as
 $ A = U \Lambda \tran{U} $, the solution is given by:
 \begin{equation}
 	Y = U_{\hat{d}} (\Lambda_{\hat{d}})^{\frac{1}{2}}
+	\label{eq:lrapprox}
 \end{equation}
 where $ U_{\hat{d}}$ and $\Lambda_{\hat{d}} $ denote first 
 $ \hat{d} $ columns of corresponding matrix. 
@@ -1296,7 +1298,25 @@ is minimized. We refer interested readers to their work and
 omit detailed discussion here. 
 
 \subsection{Polarization}
-[m. brand] unifying view... 
+%[m. brand] unifying view... 
+
+In terms of operation, Ng's algorithm \cite{ng2002spectral}
+and Brand's algorithm \cite{brand2003unifying} are similar. 
+The former operates on symmetric normalized adjacency matrix 
+and the latter operates on adjacency matrix. What's more, 
+they both engage a projection onto unit sphere in the post-processing 
+stage(\rsec{\ref{sec:postproc}} in our framework). 
+
+The justification of Brand comes from the polarization theorem. 
+We present the intuition here and refer interested readers to 
+\cite{brand2003unifying} for more information. 
+Suppose now the affinity matrix is a kernel matrix, 
+\req{\ref{eq:lrapprox}} gives an embedding justified by 
+low-rank approximation. With the decrease of $ \hat{d} $, 
+the angles between points having high affinity decrease, 
+and the angles between points having low affinity increase. 
+Thus the clustering structure should be more and more clear. 
+
 
 \section{Other Spectral Embedding Technique}
 \label{sec:nldr}
