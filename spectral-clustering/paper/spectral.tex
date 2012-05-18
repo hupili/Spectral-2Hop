@@ -175,6 +175,7 @@ concisely (except for when we have different organization and views).
 
 
 \subsection{Spectral Clustering Taxonomy}
+\label{sec:taxonomy}
 
 When the readers start to survey SC related topics, they will soon find that
 there are two streams of study:
@@ -2032,6 +2033,57 @@ able to work out nearly equivalent outcomes:
 \section{Conclusion}
 \label{sec:conclusion}
 
+Our contribution in this article comes from 
+the following aspects:
+\begin{itemize}
+	\item Spectral Clustering is a seemingly abused term. 
+	We provide a taxonomy based on our survey, categorizing 
+	those algorithms into Spectral Embedding type and 
+	Spectral Graph Partitioning type. (\rsec{\ref{sec:taxonomy}})
+	\item There are too many variations of SC and they all have 
+	algorithm specific justifications. We proposed a general 
+	three-stage framework which can cover all the variations 
+	we encounter in the survey. The framework is analyzed 
+	from a practitioner's perspective without justification. 
+	The purpose is to show all kinds of possibilities. 
+	Based on our framework, researchers can examine what is
+	done and what is left. If they find some combinations 
+	working well on certain problem, seeking for justification 
+	will be an interesting research work. (\rsec{\ref{sec:framework}})
+	\item We also collect many justifications for SC 
+	and analyze combinatoric justifications and stochastic 
+	justifications in depth. For the cut based justification, 
+	we start from a mere cut case and obtain a poorly-defined 
+	optimization problem. Normalization constraints are proposed
+	to well define the problem from optimization perspective. 
+	Different normalization constraints map back to different 
+	combinatoric objectives. In this way, we provide a 
+	viewpoint different from most literatures.  
+	(\rsec{\ref{sec:justification}})
+	\item Dimensionality Reduction methods from machine learning 
+	community share a lot in common with SC/SE. In this article, 
+	we term them all by Spectral Embedding Technique, because
+	eigen value decomposition is involved and embedding into 
+	lower-dimensional Euclidean space is a core procedure. 
+	We briefly derive some representative spectral dimensionality reduction 
+	methods and map them to our framework. 
+	(\rsec{\ref{sec:nldr}})
+	\item We provide unifying views from Graph Framework, Kernel 
+	Framework, and mathematical foundation(trace minimization). 
+	Those views reveal the analogy among SET algorithms. 
+	(\rsec{\ref{sec:unify}})
+	\item The Graph Framework and Kernel Framework are too 
+	general to give us any hints on how to utilize the 
+	similarities/dissimilarities between those algorithms. 
+	To compensate for this, 
+	we adapt a kernel clustering method and propose
+	the conditions under what Kernel K-Means and Spectral 
+	Clustering are nearly output equivalent. 
+	This gives a chance for the two kinds of algorithms 
+	to work interchangeably. The testing 
+	of our hypotheses is left for future work due to time limit. 
+	(\rsec{\ref{sec:kcluster}})
+\end{itemize}
 
 %>============================================
 \section*{Acknowledgements}
