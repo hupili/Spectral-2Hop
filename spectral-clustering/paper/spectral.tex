@@ -87,7 +87,7 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Spectral Clustering(SC) was used in several disciplines long ago. 
+Spectral Clustering(SC) has long been used in several disciplines. 
 For example, computer vision\cite{shi2000normalized}.
 Spectral Embeding(SE) was 
 also widely discussed in the community\cite{brand2003unifying}. 
@@ -176,7 +176,7 @@ graph, i.e. all entries of $A$ are 0(disconnected) or 1(connected).
 	\label{fig:ssc_demo}
 \end{figure}
 
-\rfig{\ref{fig:ssc_demo}} demonstrates the result of our sample SC algorithm, 
+\rfig{\ref{fig:ssc_demo}} shows the result of our sample SC algorithm, 
 compared with standard K-means algorithm. 
 \rfig{\ref{fig:ssc_data}} shows the scatter plot of data. 
 It is composed of one radius 1 circle and another radius 2 circle, 
@@ -193,15 +193,19 @@ When clusters are not well separated spheres, it has difficulty recovering
 the underlying clusters. Although K-means works for this case 
 if we transform the points 
 into polar coordinate system(see \cite{hu2012-spectral2hop} for code), 
-the solution is not universal. However, in this example, our sample SC 
-algorithm can separate the two clusters, probably because the eigenvectors
+the solution is not universal. On the contrary, our sample SC 
+algorithm can separate the two clusters in this example. 
+Informally speaking, this is 
+probably because the eigenvectors
 of adjacency matrix convey adequate information. 
 
 A precaution is that \ralg{\ref{alg:sc_sample}} does not always work even 
-in this simple case. Nor have we seen this algorithm from formally published works
+in this simple case. Nor have we seen this algorithm in formally published works
 (so far), let alone justifications. This algorithm is only to show the flavour 
 of spectral clustering and it contains those important steps in other
-more sophisticated algorithms. Readers are recommended to learn 
+more sophisticated algorithms. 
+
+Readers are recommended to learn 
 von Luxburg's tutorial\cite{von2007tutorial} before reading the following sections. 
 Since that paper is very detailed, we'll present overlapping topics 
 concisely (except for when we have different organization and views). 
@@ -227,14 +231,14 @@ there are two streams of study:
 		Later Kannan et al. analyzed the framework further\cite{kannan2004clusterings}. 
 		The core procedure of this type of algorithm is a 2-way 
 		partitioning subroutine. By invoke this subroutine on 
-		resultant subgraph repeatedly, we can get final $K$ clusters. 
+		resultant subgraph repeatedly, we can finally get  $K$ clusters. 
 		When the subroutine can guarantee certain quality, 
 		the global resultant clustering quality can be guaranteed
 		\cite{kannan2004clusterings}. The attracting aspect of Kannan's framework
 		is that, we can plugin any subroutine as long as they have 
-		quality gurantee in one cut. For example, the eigen vector of 
+		quality gurantee in one 2-way cut. For example, the eigen vector of 
 		left normalized graph Laplacian can induce good 2-way cut 
-		in terms of the Normalized Cut\cite{shi2000normalized}
+		in terms of the Normalized Cut criterion\cite{shi2000normalized}
 		(\rsec{\ref{sec:ncut}}). This line of research is more close 
 		to Spectral Graph Partitioning(SGP), although those algorithms also get the name 
 		of Spectral Clustering. 
@@ -242,34 +246,38 @@ there are two streams of study:
 
 It's worth to note some work of SGP. In Spielman's\cite{spielman-2009spectral-ln} 
 and Lau's\cite{lau-2012-spectral-ln} lecture notes, they both presented a 
-graph partitioning algorithm said to result from Lov{\'a}sz\cite{lovasz1990mixing}. 
+graph partitioning algorithm by random walk argument
+(said to stem from Lov{\'a}sz\cite{lovasz1990mixing}). 
 Chung\cite{chung2007random} made this framework clear: First define a function 
 $f(v)$ on all vertices; Then set threshold $T$ to cut vertices into two groups, 
 $\{v|f(v) \le T\}$ and $\{v|f(v) > T\}$. The question now becomes to find a 
 good heuristic function $f$. Note that the original bi-partition problem is of
-complexity $O(2^N)$ and the heuristic based bi-partition problem is of 
-$O(N)$(plus the time to get $f$). If we define $f$ as the second eigen vector 
-of left normalized graph Laplacian, it is just the algorithm of Shi and
+complexity $O(2^N)$ and the complexity of heuristic based bi-partition problem is  
+only $O(N)$(plus the time to get $f$). If we define $f$ as the second eigen vector 
+of left normalized graph Laplacian, it coincides with the algorithm of Shi and
 Malik\cite{shi2000normalized}. Besides, there can be multiple $f_i$ and 
 the best cut can still be searched in polynomial time
 (given $f_i$). For example, in 
 \cite{lau-2012-spectral-ln} Lau used random walk probability 
-$P_1, P_2, \ldots, P_t$ as $f$. Some recent research of the heuristic function
+$P_1, P_2, \ldots, P_t$ of each step as $f$. 
+Some recent research of the heuristic function
 are Personalized Pagerank\cite{andersen2007detecting}, 
 Evolving Sets\cite{andersen2009finding}, etc. 
 
 In the rest of this article, we refer Spectral Clustering to the 
 first type, i.e. the embedding like algorithms. 
 
-
-\subsection{Linear Algebraic Properties}
-
-
+%
+%\subsection{Linear Algebraic Properties}
+%At first, I want to organize a section discussing 
+%general properties of graphs. Then I found I can 
+%make the notion clear in a per use per definition basis. 
+%This section is canceled. 
 
 \section{Spectral Clustering Framework}
 \label{sec:framework}
 
-We propose the following framework to absorb currently 
+We propose the following framework to cover currently 
 surveyed variations of SC(and other SET):
 \begin{enumerate}
 	\item \textbf{Metric Formulation}. 
@@ -299,7 +307,7 @@ surveyed variations of SC(and other SET):
 		simple algorithms working in Euclidean space can detect 
 		the clusters. For DR community, this embedding reveals 
 		the shape of manifolds in their parametric space. 
-		The two goals are essentially the same. The core procedure 
+		The two goals are essentially correlated. The core procedure 
 		is to do EVD and differences 
 		lie before and after EVD:
 			\begin{itemize}
@@ -346,12 +354,17 @@ seek for justifications using tools from spectral graph theory or machine learni
 \subsection{Metric Formulation}
 \label{sec:metric}
 
-We rate great importance of metric formulation step, 
-although it is not the main body of SET. 
+Although metric formulation is not the main body of SET, 
+we think of it highly important.  
 There are always many ways of metric formulation
 given a practical problem. With poorly constructed 
 metric matrix, even the best embedding technique helps little.  
+Besides, after all the disucssion in this article, 
+we will find that a large portion of 
+differences between algorithms 
+are absorbed in this stage. 
 
+%20120515...
 %This is a test of math fonts!
 %Yeah! I found the notation for normalized 
 %adjacency and Laplacian is just the 
@@ -362,12 +375,15 @@ metric matrix, even the best embedding technique helps little.
 %    \mathsf{L}
 %    \mathtt{L}
 %    \mathcal{L}$
+%20120518...
+%Although I found how to write \mathcal{A}
+%I did not use it in this article, sigh..
 
 \subsubsection{High Dimensional Data}
 \label{sec:metric_hdd}
 
 For high dimensional data, the following ways can be 
-applied to obtain a graph representation:
+applied to obtain an adjacency graph:
 \begin{itemize}
 	\item $\epsilon$-ball\cite{von2007tutorial}. If $||x_i-x_j|| < \epsilon$, we connect 
 		vertices $i,j$ with an edge. 
@@ -380,7 +396,8 @@ applied to obtain a graph representation:
 		weighting below. 
 \end{itemize}
 
-After the construction of graph, edges can be weighted in several ways:
+The adjacency graph only concerns how vertices are connected. 
+After the construction of adjacency graph, edges can be weighted in several ways:
 \begin{itemize}
 	\item Unweighted\cite{belkin2003laplacian}. The adjacency matrix is 
 		mere 1(connected) or 0(disconnected). 
@@ -403,7 +420,8 @@ different practical problems:
 		Accodingly, when Gaussian kernel is used, the edge weight
 		is given by $A_{ij} = \exp\{-0.5\tran{(x_i-x_j)}\Sigma^{-1}(x_i-x_j)\}$. 
 	\item Jaccard's coefficient\cite{wiki_jaccard}. It computes the ratio 
-		of the intersection and union two sets. It is useful when 
+		of the intersection size to the union size of
+		two sets. It is useful when 
 		the high dimensional input coordinates can be interpreted as 
 		sets. 
 	\item Cosine similarity\cite{wiki_cos}. It computes the 
@@ -448,17 +466,17 @@ There are yet two problems left:
 	\item First, not all dissimilarities are distance. One reason is 
 		that the real world data is with noise. In such case, 
 		random noise will be reduced by SET. Another reason, 
-		maybe more frequently seen, is data inconsistency. 
-		This is quite often seen in computational psychology 
+		maybe more frequently observed, is data inconsistency. 
+		This is a usual case in computational psychology 
 		when people try to rate the degree of dissimilarity of 
 		objects\cite{borg2005modern}. Those empirical data 
 		may break distance laws, like triangle inequality. 
 	\item Second, in order to make double centering work, 
-		the low dimensional data are required to zero mean, 
+		the low dimensional data are required to have zero mean, 
 		namely $\sum_i{x_i} = 0$. Actually, we can choose any 
 		points as the origin(rather than sample mean), and 
 		corresponding forms can be derived. Since our input in this case 
-		is pairwise distance($D$ or $D^{(2)}$), their is no 
+		is pairwise distance($D$ or $D^{(2)}$), there is no 
 		explicit definition of origin. Or in another word, 
 		the effect of embedding is invariant under translation. 
 		We can safely locate the embedded sample mean at the origin. 
@@ -499,7 +517,7 @@ be hard.
 \label{sec:se}
 
 This stage takes a weighted graph adjacency matrix as input. 
-The matrix can be derive from several starting points as 
+The matrix can be derived from several starting points as 
 described in the last section. Besides, enhancements may 
 have already been performed. Regardless of their origins, 
 we treat them as the adjacency matrix of similarity graph. 
@@ -524,7 +542,7 @@ is mighty, which could be absorbed into more general framwork
 those self-loops as is in most SC literature. 
 
 In machine learning community, $A$ is more probably expected to be
-a inner product matrix. In other words, it is Positive SemiDefinite(PSD). 
+an inner product matrix. In other words, it is Positive SemiDefinite(PSD). 
 In the language of kernels, it is a valid Gram matrix. For example, 
 in \rsec{\ref{sec:metric_hdd}}, we use the Gaussian kernel
 $A_{ij} = \exp\{-||x_i-x_j||^2/t\}$ to weight edges. If we stick to 
@@ -558,6 +576,13 @@ essentially the same.
 \subsubsection{Adjacency or Laplacian}
 \label{sec:adj_lap}
 
+%Sigh.. D has already been used.. so ?
+%D E E G R E -> D E G R
+%D for distance 
+%E for edge
+%G for graph
+%all are used...!!!
+%So R. R. R. R....
 We define the degree matrix $R$ to be a diagonal matrix with 
 $R_{ii} = \sum_j{A_{ij}}$. The Laplacian is defined as:
 \begin{equation}
@@ -569,7 +594,7 @@ The use of adjacency or Laplacian is closely related with
 the justification. For adjacency matrix, the normalized version 
 has analogy to a transition matrix of a Markov process. 
 Besides, the adjacency matrix series SET often has 
-angule preserving justification. 
+angle preserving justification. 
 For Laplacian, its variations may appear in cut or conductance
 like objectives. 
 
@@ -593,11 +618,11 @@ matrix, the first largest eigen vectors are used. This is natural
 due to the negation in \req{\ref{eq:def_lap}}. 
 
 We leave further discussion of the use of adjacency or Laplacian 
-to \rsec{\ref{sec:justification}} where the context is more clear. 
+to \rsec{\ref{sec:justification}}, where the context is more clear. 
 
 \subsubsection{Normalization}
 
-The intuition of normalization comes in two folds:
+The intuition of normalization can be explained as:
 \begin{itemize}
 	\item In spectral graph theory justifications, like 
 	Ratio Cut (\rsec{\ref{sec:rcut}}), 
@@ -627,10 +652,12 @@ collect possible normalization operations in \rtbl{\ref{tbl:normalization}}.
 		Unnormalized & $A$ & $L$ \\
 		Symmetric normalized & $\sym{A}=W^{-\frac{1}{2}}AW^{-\frac{1}{2}}$ 
 			& $\sym{L}=W^{-\frac{1}{2}}LW^{-\frac{1}{2}}$ \\
-		Left normalized & $\rw{A}=W^{-1}A$ & $\rw{L}=W^{-1}A$\\
+		Left normalized & $\rw{A}=W^{-1}A$ & $\rw{L}=W^{-1}A$ \footnotemark \\
 		\hline
 	\end{tabular}
 \end{table}
+
+\footnotetext{The "rw" stands for "random walk"\cite{von2007tutorial}. }
 
 Assume $ \lambda, \sym{\lambda}, \rw{\lambda} $ are eigenvalues
 of $ A, \sym{A}, \rw{A} $ with corresponding eigen vectors 
@@ -651,7 +678,7 @@ the following array of equations:
 
 Comparing \req{\ref{eq:eiga}} and \req{\ref{eq:eigarw1}}, we can see that 
 left normalized version corresponds to solving a generalized eigen
-problem $ (A, W) $. It's obvious normalization makes a big difference 
+problem $ (A, W) $. It's obvious that normalization makes a big difference 
 in practice. On the other hand, there is only slight difference 
 between two types of normalization. 
 Comparing \req{\ref{eq:eigarw2}} and \req{\ref{eq:eigasym}}, 
@@ -921,7 +948,7 @@ the fact that characteristic vectors are orthogonal.
 
 Now we find the problem of \req{\ref{eq:cut_relax}} is poorly-defined. 
 Without further constraints, the choice $ V=0 $ yield the minimum
-but it's obviously contrary to our real objective. Note that the unrelaxed
+but it's obviously far from our real objective. Note that the unrelaxed
 version is well-defined, for the value of $ \chi_{C_i} $ is constrained 
 to $ \{0,1\} $. Certain "normalization" helps to well define our objective. 
 In the following part of this section, we'll see 
