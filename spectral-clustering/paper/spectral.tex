@@ -171,7 +171,7 @@ of spectral clustering and it contains those important steps in other
 more sophisticated algorithms. Readers are recommended to learn 
 von Luxburg's tutorial\cite{von2007tutorial} before reading the following sections. 
 Since that paper is very detailed, we'll present overlapping topics 
-concisely. 
+concisely (except for when we have different organization and views). 
 
 
 \subsection{Spectral Clustering Taxonomy}
@@ -878,7 +878,7 @@ Standard clustering algorithms in Euclidean space can easily
 give the right clustering. So one heuristic is to relax the problem 
 to permit real values, i.e. substitute $ \chi_{C_i} $ by $ v_i $:
 \begin{equation}
-	\minimize_{v_i \in \mathbb{R}^N, \tran{v_i}v_j = 0 V=(v_1,v_2, \ldots , v_N) }
+	\minimize_{v_i \in \mathbb{R}^N, \tran{v_i}v_j = 0, V=(v_1,v_2, \ldots , v_N) }
 	{ \tr{ \tran{V} L V } }
 	\label{eq:cut_relax}
 \end{equation} 
@@ -1868,8 +1868,10 @@ can try to leverage the sophisticated SETs to solve it.
 Or vice versa, solve clustering / embedding / DR by solving 
 the new problem. Next section is right an example. 
 
-\subsection{Kernel K-means}
-\label{sec:kkmean}
+\subsection{Kernel Clustering}
+\label{sec:kcluster}
+
+
 
 \section{Conclusion}
 \label{sec:conclusion}
