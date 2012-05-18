@@ -1826,6 +1826,50 @@ There are some points worth to note:
 \subsection{Trace Maximization}
 \label{sec:trmax}
 
+The graph framework and kernel framework provide 
+operational views of SET. In this section, we 
+discuss their fundamental causes. 
+
+In \rsec{\ref{sec:framework}}, \rsec{\ref{sec:justification}}
+and \rsec{\ref{sec:nldr}}, we are frequently encountered with 
+an optimization problem:
+\begin{eqnarray}
+	\maximize_{U} && { \tr{\tran{U}MU} } \nonumber \\
+	s.t. && \tran{U} W U = I
+\end{eqnarray}
+This is known as trace maximization problem in many literatures. 
+The EVD based solution roots from this type of optimization. 
+The orgins are different:
+\begin{itemize}
+	\item Relaxed combinatoric problem. \rsec{\ref{sec:combinatoric}} 
+	presents several combinatoric objectives. Relaxing those objectives
+	result in the trace maximization problem.
+	This batch of algorithms tend to preserve topology.  
+	The matrix to be eigen 
+	decomposed is usually a sparse one (the neighbourhood graph 
+	is usually sparse). 
+	\item Distortion. Most algorithms in \rsec{\ref{sec:nldr}} 
+	define certain kind of distortion measure using $ ||.||^2 $.
+	The summation over squared Euclidean distance can be casted 
+	into the trace form algebraically. This batch of algorithms 
+	tends to preserve distance and induce dense matrix
+	(e.g. all pair geodesic distance in isomap).  
+\end{itemize}
+This is not a rigid categorization of algorithms. For example, 
+in LLE, the second step computing neighbourhood reconstruction 
+weights tries to preserve topology and 
+results in a sparse matrix. The third step 
+minimizes reconstruction distortion and decomposes
+$ (I - \tran{W})(I - W) $, which is not sparse in general. 
+Thus LLE exihbits both fashions. 
+
+The observation in this section is that, if 
+other non clustering / non embedding / non DR problem 
+shows a core procedure of trace maximization, we 
+can try to leverage the sophisticated SETs to solve it. 
+Or vice versa, solve clustering / embedding / DR by solving 
+the new problem. Next section is right an example. 
+
 \subsection{Kernel K-means}
 \label{sec:kkmean}
 
