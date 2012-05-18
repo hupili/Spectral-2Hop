@@ -1420,84 +1420,6 @@ comes from two assumptions:\cite{donoho2003hessian}
 	in parametric space is convex.  
 \end{itemize}
 
-
-\subsection{Laplacian Eigenmap}
-\label{sec:lemap}
-
-By first glance, one may find that 
-Laplacian eigenmap(LEmap)\cite{belkin2003laplacian}
-is the same as the widely recognized
-spectral clustering (very close to the three
-algorithms in \cite{von2007tutorial}). 
-However, this algorithm is derived from a 
-different objective. 
-
-The SE stage in SC is to make
-the points more separable in a lower-dimensional 
-Euclidean distance. As to general purpose embedding algorithms, 
-or DR methods, the objective is to find a configuration that 
-best describe the data. This informal objective can be 
-realized in many ways. The one LEmap adopted is the weighted 
-distortion:
-\begin{equation}
-	\text{Distortion} = \sum_{(i,j) \in E} ||Y_{(i,:)} - Y_{(j,:)}||^2 A_{ij}
-\end{equation}
-where $ Y_{(i,:)} $ denotes the $ i $-th row of embedding matrix. 
-The intuition is, when two vertices are connected, we want 
-their embedding in lower dimensional space lie close. 
-The higher their similarity($ A_{ij} $) is, the more penalty 
-we get if we put them far apart. This objective is equivalent to 
-\begin{eqnarray}
-	\text{Distortion} &=& \sum_{(i,j) \in E} 
-	\sum_{l=1}^{\hat{d}}(Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
-	&=& \sum_{l=1} \sum_{(i,j) \in E} (Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
-	&=& \sum_{l=1} \tran{Y_{(:,l)}} L Y_{(:,l)} \\
-	&=& \tr{ \tran{Y} L Y }
-\end{eqnarray}
-To this end, the objective becomes the same as \req{\ref{eq:cut_relax}}. 
-We know that this objective is poorly defined. Since the whole 
-\rsec{\ref{sec:combinatoric}} is devoted to discussing the normalization 
-constraints, we use the results directly. 
-\rsec{\ref{sec:combinatoric}} showed we can 
-impose a general weight matrix $ W $ as normalization 
-constraints. In Belkin's work\cite{belkin2003laplacian}, 
-$ W=R $(degree matrix) is selected. We conclude the algorithm 
-in \ralg{\ref{alg:lemap}}. 
-
-\begin{algorithm}[htb]
-	\caption{Laplacian Eigenmap}
-	\label{alg:lemap}
-	\begin{algorithmic}[1]
-		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
-			Dimensionality of embedding space $ \hat{d} $
-		\ENSURE Embedding $ Y_{N \times \hat{d}} $
-		\STATE Construct (weighted) similarity graph $ G = <V, E> $. 
-		\COMMENT{\rsec{\ref{sec:metric_hdd}} }
-		\STATE Obtain left normalized graph Laplacian $ \rw{L} $. 
-		\STATE EVD: $ \rw{L}U = U \Lambda $
-		\COMMENT{Ascending Eigenvlue}
-		\STATE $ Y = U_{\hat{d}} $
-	\end{algorithmic}
-\end{algorithm}
-
-\subsection{Hessian Eigenmap}
-\label{sec:hemap}
-
-Hessian Eigenmap, also called Hessian Locally Linear Embedding
-\cite{donoho2003hessian}, is shown to have theoretical 
-advantages in embedding. The two assumptions of isomap
-(\rsec{\ref{sec:isomap}}) are relaxed to:
-\begin{itemize}
-	\item Local isometry. In isomap, global isometry is assumed 
-	and geodesic distance is in favour. In Donoho's study, 
-	many image examples are shown to exihbit isometry\cite{donoho2003hessian}. 
-	They keep the isometry assumption but relax it to a local version. 
-	\item Connectedness. In isomap, the assumption that 
-	parametric set is convex does not always hold. Non-convexity
-	can arise naturally for compound shapes. Missing samples 
-	in observation space is also a problem. 
-\end{itemize} 
-
 \subsection{PCA}
 \label{sec:pca}
 
@@ -1723,6 +1645,82 @@ for more details.
 	\end{algorithmic}
 \end{algorithm}
 
+\subsection{Laplacian Eigenmap}
+\label{sec:lemap}
+
+By first glance, one may find that 
+Laplacian eigenmap(LEmap)\cite{belkin2003laplacian}
+is the same as the widely recognized
+spectral clustering (very close to the three
+algorithms in \cite{von2007tutorial}). 
+However, this algorithm is derived from a 
+different objective. 
+
+The SE stage in SC is to make
+the points more separable in a lower-dimensional 
+Euclidean distance. As to general purpose embedding algorithms, 
+or DR methods, the objective is to find a configuration that 
+best describe the data. This informal objective can be 
+realized in many ways. The one LEmap adopted is the weighted 
+distortion:
+\begin{equation}
+	\text{Distortion} = \sum_{(i,j) \in E} ||Y_{(i,:)} - Y_{(j,:)}||^2 A_{ij}
+\end{equation}
+where $ Y_{(i,:)} $ denotes the $ i $-th row of embedding matrix. 
+The intuition is, when two vertices are connected, we want 
+their embedding in lower dimensional space lie close. 
+The higher their similarity($ A_{ij} $) is, the more penalty 
+we get if we put them far apart. This objective is equivalent to 
+\begin{eqnarray}
+	\text{Distortion} &=& \sum_{(i,j) \in E} 
+	\sum_{l=1}^{\hat{d}}(Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
+	&=& \sum_{l=1} \sum_{(i,j) \in E} (Y_{(i,l)} - Y_{(j,l)})^2 A_{ij} \\
+	&=& \sum_{l=1} \tran{Y_{(:,l)}} L Y_{(:,l)} \\
+	&=& \tr{ \tran{Y} L Y }
+\end{eqnarray}
+To this end, the objective becomes the same as \req{\ref{eq:cut_relax}}. 
+We know that this objective is poorly defined. Since the whole 
+\rsec{\ref{sec:combinatoric}} is devoted to discussing the normalization 
+constraints, we use the results directly. 
+\rsec{\ref{sec:combinatoric}} showed we can 
+impose a general weight matrix $ W $ as normalization 
+constraints. In Belkin's work\cite{belkin2003laplacian}, 
+$ W=R $(degree matrix) is selected. We conclude the algorithm 
+in \ralg{\ref{alg:lemap}}. 
+
+\begin{algorithm}[htb]
+	\caption{Laplacian Eigenmap}
+	\label{alg:lemap}
+	\begin{algorithmic}[1]
+		\REQUIRE High dimensional data $X = [x_1, x_2, \ldots, x_N]$; \\
+			Dimensionality of embedding space $ \hat{d} $
+		\ENSURE Embedding $ Y_{N \times \hat{d}} $
+		\STATE Construct (weighted) similarity graph $ G = <V, E> $. 
+		\COMMENT{\rsec{\ref{sec:metric_hdd}} }
+		\STATE Obtain left normalized graph Laplacian $ \rw{L} $. 
+		\STATE EVD: $ \rw{L}U = U \Lambda $
+		\COMMENT{Ascending Eigenvlue}
+		\STATE $ Y = U_{\hat{d}} $
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Hessian Eigenmap}
+\label{sec:hemap}
+
+Hessian Eigenmap, also called Hessian Locally Linear Embedding
+\cite{donoho2003hessian}, is shown to have theoretical 
+advantages in embedding. The two assumptions of isomap
+(\rsec{\ref{sec:isomap}}) are relaxed to:
+\begin{itemize}
+	\item Local isometry. In isomap, global isometry is assumed 
+	and geodesic distance is in favour. In Donoho's study, 
+	many image examples are shown to exihbit isometry\cite{donoho2003hessian}. 
+	They keep the isometry assumption but relax it to a local version. 
+	\item Connectedness. In isomap, the assumption that 
+	parametric set is convex does not always hold. Non-convexity
+	can arise naturally for compound shapes. Missing samples 
+	in observation space is also a problem. 
+\end{itemize} 
 
 \section{Unifying Views}
 \label{sec:unify}
