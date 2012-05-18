@@ -1871,7 +1871,163 @@ the new problem. Next section is right an example.
 \subsection{Kernel Clustering}
 \label{sec:kcluster}
 
+This section stems from the work of Dhillon\cite{dhillon2004unified}, 
+who had an interesting observation of Kernel K-Means(KKM) and spectral 
+clustering. However, the logic in the original work has some pitfalls. 
+We will derive the relationship in a coherent way with this article, 
+point out the pitfalls and argue when this kind of correspondance holds. 
 
+The motivation comes in two folds:
+\begin{itemize}
+	\item We have three stages in SC framework. The first stage
+	can be abstracted by finding a kernel(\rsec{\ref{sec:kfx}}). 
+	In the last hard cut stage, traditional choice is K-Means(KM). 
+	Will it be possible to directly invoke KKM? 
+	\item The computation of EVD is time consuming. For a full 
+	decomposition, it has $ O(N^3) $ complexity. For partial 
+	decomposition, it  has $ O(\hat{d}N^2) $ complexity. 
+	However, one iteration of KM or KKM is only $ O(NK) $. 
+	KKM will have computational advantage when number of 
+	samples $ N $ is very large. (of course, on the condition 
+	that they yield the approximately the same result)
+\end{itemize}
+
+In \rsec{\ref{sec:combinatoric}}, we see the Cut minimization 
+objective is equivalent to the following discrete trace minimization 
+objective:
+\begin{equation}
+    \minimize_{\{C_1, C_2, \ldots, C_k\}}{ \tr{ \tran{\chi} L \chi } }
+    \label{eq:cut_trmin}
+\end{equation}
+where $ \chi = [\chi_{C_1}, \chi_{C_2}, \ldots , \chi_{C_k}] $, 
+denoting the characteristic vectors.
+The association maximization is equivalent to the following 
+discrete trace maximization objective:
+\begin{equation}
+	\maximize_{\{C_1, C_2, \ldots, C_k\}}{ \tr{ \tran{\chi} A \chi } }
+	\label{eq:assoc_trmax}
+\end{equation}
+The term "discrete" means that $ \chi $ can only take 
+a set of discrete values(e.g. $ 0,1 $-valued). 
+It becomes trace minimization problem after we relax $ \chi $
+to take real value. 
+
+The objective of clustering is defined as:
+\begin{eqnarray}
+	\minimize_{\{C_1, C_2, \ldots, C_k\}} && 
+	J(\{C_i\}) = \sum_{i=1}^{k}\sum_{j \in C_i}{||x_j-m_i||^2} \\
+	\text{where} && m_i = \argmin_x{ \sum_{j \in C_i}||x_j - x||^2 }
+\end{eqnarray}
+where $ m_i $ is the cluster centroid and it can be shown 
+that $ m_i = \frac{1}{|C_i|} \sum_{j \in C_i}{x_j} $. Now we want to 
+perform a clustering in a feature space, $ \phi(x_j) $. 
+Following similar approach, the objective can be written as:
+\begin{eqnarray}
+	\minimize_{\{C_1, C_2, \ldots, C_k\}} && 
+	J(\{C_i\}) = \sum_{i=1}^{k}\sum_{j \in C_i}{||\phi(x_j)-m_i||^2} \\
+	\text{where~~~}  m_i 
+	&=& \argmin_{\phi(x)}{ \sum_{j \in C_i}||\phi(x_j) - \phi(x) ||^2 } \nonumber \\
+	&=& \frac{1}{|C_i|} \sum_{j \in C_i}{\phi(x_j)}
+\end{eqnarray}
+Denote $\Phi = [\phi(x_1), \phi(x_2), \ldots, \phi(x_N)]$
+and $ D^{(2)} $ be the squared distance matrix in feature space. From the 
+analysis in \rsec{\ref{sec:proximity}}, we know:
+\begin{equation}
+	D^{(2)} = c\tran{\vec{1}} + \vec{1}\tran{c} - 2 \tran{\Phi}\Phi
+\end{equation}
+where $c$ is a column vector with $\tran{\phi(x_i)}\phi(x_i)$ being the entries.
+Using the equality $ \sum_{j \in C_i}{||\phi(x_j)-m_i||^2}
+= 0.5 \sum_{j,l \in C_i}{||\phi(x_j)-\phi(x_l)||^2} $, 
+we can transform the objective as:
+\begin{eqnarray}
+	J(\{C_i\}) &=& \sum_{i=1}^{k}0.5\sum_{j,l \in C_i}{||\phi(x_j)-\phi(x_l)||^2} \\
+	&=& 0.5  \sum_{i=1}^{k} \tran{\chi_{C_i}} D^{(2)} \chi_{C_i} \\
+	&=& 0.5 \tr{ \tran{\chi} D^{(2)} \chi }
+\end{eqnarray}
+Comparing with \req{\ref{eq:cut_trmin}} and \req{\ref{eq:assoc_trmax}}, 
+we obtained a similar form. However, elements of $ D^{(2)} $ represents 
+squared distance and are thus all non-negative but
+$ L $ in \req{\ref{eq:cut_trmin}} has non-positive off-diagonals. 
+We can not construct the a clustering problem corresponding to \req{\ref{eq:cut_trmin}}. 
+Now consider the association maximization(\req{\ref{eq:assoc_trmax}}), 
+but our current objective of uses minimization. We need to transform 
+$ J(\{C_i\}) $ again to obtain a maximization version:
+\begin{eqnarray}
+	J(\{C_i\}) &=& 0.5 \tr{ \tran{\chi} 
+	(c\tran{\vec{1}} + \vec{1}\tran{c} - 2 \tran{\Phi}\Phi)  \chi } \\
+	&=& \tr{ \tran{\chi}c\tran{\vec{1}}\chi }
+	- \tr{ \tran{\chi}\tran{\Phi}\Phi \chi}
+\end{eqnarray}
+This form looks interesting. If the first term is 
+(nearly) constant to $ \chi $, we can focus 
+on maximizing the second term. What's more, 
+$ \tran{\Phi}\Phi $ is a Gram matrix. If $ A $ is also a 
+Gram matrix, the correspondance is clear. 
+
+The problem is now to determine under what condition 
+$ \tr{ \tran{\chi}c\tran{\vec{1}}\chi } $ can be treated 
+as constant. In \cite{dhillon2004unified}, they 
+assign 
+\begin{equation}
+    \chi_{C_i}(v) = \left\lbrace \begin{array}{cc}
+	\frac{1}{\sqrt{|C_i|}} & v \in C_i \\
+	0 & \text{else}
+	\end{array} \right. 
+	\label{eq:cluster_chi}
+\end{equation}
+and it can be shown:
+\begin{equation}
+	\tr{ \tran{\chi}c\tran{\vec{1}}\chi }
+	= \sum_{i=1}^{k}\sum_{j \in C_i}\frac{c_j|C_i|}{\sqrt{|C_i|}\sqrt{|C_i|}}
+	= \sum_{i=1}^{k}\sum_{j \in C_i}c_j
+	= \sum_{j=1}^{N} c_j
+\end{equation}
+namely, a constant! However, the second term takes 
+$ \{0,1\} $-value
+(or it will not be the clustering objective any more)
+instead of \req{\ref{eq:cluster_chi}}. 
+That means, we transform to the problem
+\begin{equation}
+	\maximize_{\{C_1, C_2, \ldots, C_k\}} \tr{ \tran{\chi}\tran{\Phi}\Phi \chi}
+\end{equation}
+with the restriction of \req{\ref{eq:cluster_chi}} but 
+solve it with another restriction. 
+Nevertheless, observing the analogy between 
+KKM and SC is insightful. 
+
+By examing $ \tr{ \tran{\chi}c\tran{\vec{1}}\chi } $, 
+we propose some conditions to make it nearly constant:
+$ c_j = 1, \forall j $. That is, $ c_j $ is constant. We 
+use $ 1 $ for simplicity. It is shown by:
+\begin{equation}
+	\tr{ \tran{\chi}c\tran{\vec{1}}\chi }
+	= \sum_{i=1}^{k}\sum_{j \in C_i}c_j|C_i|
+	=\sum_{i=1}^{k}|C_i|^2
+\end{equation}
+This condition is often satisfied, for 
+$ c_j = \tran{\phi(x_i)}\phi(x_i) = k(x_i,x_i) $. Some 
+data independent kernels have constant diagonals, 
+e.g. $ k(x_i,x_j) = \exp\{-\frac{||x_i-x_j||^2}{t}\} $. 
+Now assume we have an ideal algorithm to solve the clustering 
+algorithm, called CL. If some condition can drive CL to 
+make $ \tr{ \tran{\chi}c\tran{\vec{1}}\chi } $ a constant, 
+the correspondance can be established (though it is also possible 
+that solving KKM results in local maxima). 
+When $ \sum_{i=1}^{k}|C_i|^2 $ is a dominant term in the objective 
+subject to the constraint $ \sum_{i=1}^{k}|C_i| = N $, the optimal 
+configuration of cluster cardinality is equally distributed. 
+If our data points scatter into similar sized clusters naturally, 
+the ideal CL algorithm should be able to detect it. Then 
+we propose the following conditions when KKM and SC are 
+able to work out nearly equivalent outcomes:
+\begin{itemize}
+	\item There are good clustering in feature space. 
+	\item Data scatter into similar sized clusters naturally. 
+	\item $ k(x_i,x_i) = \sigma $ is constant and the larger the better. 
+	This is because  $ \tr{ \tran{\chi}c\tran{\vec{1}}\chi } =  \sigma \sum_{i=1}^{k}|C_i|^2$. 
+	Larger $ \sigma $ can make the first term dominant and CL will 
+	be forced to equal size. 
+\end{itemize}
 
 \section{Conclusion}
 \label{sec:conclusion}
